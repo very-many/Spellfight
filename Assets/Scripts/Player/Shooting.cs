@@ -25,6 +25,8 @@ public class Shooting : NetworkBehaviour
     private float safeState1;
     private float safeState2;
 
+    private double _nextFireTime;
+
     void Start()
     {
         safeState1 = transform.localScale.y;
@@ -33,10 +35,13 @@ public class Shooting : NetworkBehaviour
 
     void Update()
     {
-        Aim();
-        if(!isServer)
-            return;
-        ShouldShoot();
+        if (isLocalPlayer)
+        {
+            Aim();
+            ShouldShoot();
+        }
+        //if(isServer)
+        //    ShouldShoot();
     }
 
     public void onFire(InputAction.CallbackContext context)
@@ -55,7 +60,9 @@ public class Shooting : NetworkBehaviour
     {
         if (canFire && isFiring)
         {
-            Firing();
+            CmdFire(direction, gunRotation, bulletTransform.position);
+            canFire = false;
+            timer = 0;
         }
         else if (!canFire)
         {
@@ -107,22 +114,35 @@ public class Shooting : NetworkBehaviour
         return Camera.main.ScreenToWorldPoint(mousePos);
     }
 
-    private void Firing()
+    [Command]
+    private void CmdFire(Vector2 dir, Quaternion rot, Vector3 spawnPos)
     {
-        canFire = false;
-        //var spawnedBullet = Instantiate(bullet, bulletTransform.position, gunRotation * Quaternion.Euler(0, 0, -90));
-        //NetworkServer.Spawn(spawnedBullet.gameObject);
-        //Bullet spawnedBulletScript = spawnedBullet.GetComponent<Bullet>();
-        //spawnedBulletScript.SetGun(this);
-        //spawnedBulletScript.InitaializeBulletStats();
+        //if (NetworkTime.time < _nextFireTime) return;
+        //_nextFireTime = NetworkTime.time + timeBetweenFiring;
 
-        GameObject spawnedBullet = ObjectPool.instance.GetPooledObject();
-
-        if (spawnedBullet != null)
+        GameObject go = null;
+        if (ObjectPool.instance != null)
         {
-            Bullet spawnedBulletScript = spawnedBullet.GetComponent<Bullet>();
-            spawnedBulletScript.SetGun(this);
-            spawnedBulletScript.Launch(direction, gunRotation, bulletTransform.position);
+            go = ObjectPool.instance.GetServerObject();
+            if (go != null)
+            {
+                go.transform.SetPositionAndRotation(spawnPos, rot * Quaternion.Euler(0, 0, -90));
+                go.SetActive(true);
+                NetworkServer.Spawn(go);
+            }
+        }
+
+        if (go == null)
+        {
+            go = Instantiate(bullet, spawnPos, rot * Quaternion.Euler(0, 0, -90));
+            NetworkServer.Spawn(go);
+        }
+
+        var bulletScript = go.GetComponent<Bullet>();
+        if (bulletScript != null)
+        {
+            bulletScript.LaunchServer(dir, rot, spawnPos);
+            bulletScript.RpcLaunch(dir, rot, spawnPos);
         }
     }
 }

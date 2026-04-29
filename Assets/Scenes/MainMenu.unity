@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 883317329}
   - component: {fileID: 883317333}
   - component: {fileID: 883317332}
+  - component: {fileID: 883317334}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -323,7 +324,6 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 7407786158499650943, guid: 5e57e21e1e0db134c8bc38f8e1d1f276, type: 3}
-  - {fileID: 5995972970576921285, guid: f9fbd1683bccf5845bacd0465a610ad5, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -340,6 +340,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   GamePlayerPrefab: {fileID: 4316946553626032459, guid: 5e57e21e1e0db134c8bc38f8e1d1f276, type: 3}
+  bulletPool: {fileID: 883317334}
 --- !u!4 &883317331
 Transform:
   m_ObjectHideFlags: 0
@@ -380,6 +381,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteamManager
+--- !u!114 &883317334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883317328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dfe6120ec048b46a5e1489b485c830, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  amountToPool: 20
+  bulletPrefab: {fileID: 5995972970576921285, guid: f9fbd1683bccf5845bacd0465a610ad5, type: 3}
 --- !u!1 &891518348
 GameObject:
   m_ObjectHideFlags: 0

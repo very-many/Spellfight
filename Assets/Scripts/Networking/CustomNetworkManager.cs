@@ -9,6 +9,25 @@ public class CustomNetworkManager : NetworkManager
     [SerializeField] private PlayerObjectController GamePlayerPrefab;
     public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
 
+    [Header("Pooling")]
+    [SerializeField] private ObjectPool bulletPool;
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+
+        if (bulletPool != null)
+            bulletPool.PrewarmServer();
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        if (bulletPool != null)
+            bulletPool.RegisterClientHandlers();
+    }
+
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         if (SceneManager.GetActiveScene().name == "Lobby")

@@ -7,10 +7,8 @@ using UnityEngine;
 public class Bullet : NetworkBehaviour
 {
 
-    private Vector2 mousePos;
     private Rigidbody2D rb;
     Vector3 direction;
-    private Shooting shooting;
 
     [Header("Bullet Stats")]
     [SerializeField]
@@ -30,7 +28,6 @@ public class Bullet : NetworkBehaviour
     [SerializeField]
     private float physicsBulletGravity;
 
-    private Shooting _gun;
     private float _disableTime;
 
     public enum BulletType
@@ -39,29 +36,26 @@ public class Bullet : NetworkBehaviour
         Physics
     }
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void OnEnable()
     {
-        //Get Components
-        rb = GetComponent<Rigidbody2D>();
+        if (rb == null) rb = GetComponent<Rigidbody2D>();
         _disableTime = Time.time + timeToLive;
-        //Set + Get Direction and Rotation
-        //direction = _gun.direction;
-        //transform.rotation = _gun.gunRotation * Quaternion.Euler(0, 0, -90);
 
-        //InitaializeBulletStats();
-        //transform.right = ((mousePos - (Vector2)transform.position)).normalized;
-        //Vector3 rotation = transform.position - (Vector3)mousePos;
-        //float rot = Mathf.Atan2(rotation.x, rotation.y);
-        //transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
     }
 
     private void Update()
     {
+        if (!isServer) return;
+
         if (Time.time > _disableTime)
-        {
-            gameObject.SetActive(false);
-        }
+            ReturnToPoolServer();
     }
 
     private void FixedUpdate()
@@ -74,19 +68,28 @@ public class Bullet : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    public void SetGun(Shooting gun) => _gun = gun;
-
-    [ClientRpc]
-    public void Launch(Vector2 direction, Quaternion rotation, Vector2 position)
+    [Server]
+    public void LaunchServer(Vector2 direction, Quaternion rotation, Vector2 position)
     {
-        //Debug.Log("Launch Bullet in direction: " + direction + " with rotation: " + rotation + " at position: " + position);
         this.direction = direction;
         transform.SetPositionAndRotation(position, rotation * Quaternion.Euler(0, 0, -90));
-        this.gameObject.SetActive(true);
-        InitaializeBulletStats();
+        gameObject.SetActive(true);
+        InitializeBulletStats();
     }
-    private void InitaializeBulletStats()
+
+    [ClientRpc]
+    public void RpcLaunch(Vector2 direction, Quaternion rotation, Vector2 position)
+    {
+        // In host mode, the server already initialized the bullet.
+        if (isServer) return;
+
+        this.direction = direction;
+        transform.SetPositionAndRotation(position, rotation * Quaternion.Euler(0, 0, -90));
+        gameObject.SetActive(true);
+        InitializeBulletStats();
+    }
+
+    private void InitializeBulletStats()
     {
         if (bulletType == BulletType.Normal)
         {
@@ -114,6 +117,8 @@ public class Bullet : NetworkBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!isServer) return;
+
         //collision is within layermask
         if ((whatDestroysBullet.value & (1 << collision.gameObject.layer)) > 0)
         {
@@ -121,8 +126,24 @@ public class Bullet : NetworkBehaviour
             //Soundeffect
             //damage enemy
             //Screen shake
-            gameObject.SetActive(false);
+            ReturnToPoolServer();
             Debug.Log("hit");
         }
+    }
+
+    [Server]
+    private void ReturnToPoolServer()
+    {
+        // prevent double-return (TTL + collision in same frame, etc.)
+        if (!isServer || !gameObject.activeSelf) return;
+
+        // UnSpawn tells clients to remove it. With a registered UnspawnHandler,
+        // clients will return it to their local pool instead of Destroy().
+        NetworkServer.UnSpawn(gameObject);
+
+        // In dedicated-server mode, also keep a server-side reference.
+        // In host mode, Mirror already invoked the client-side unspawn handler.
+        if (!isClient && ObjectPool.instance != null)
+            ObjectPool.instance.ReturnServerObject(gameObject);
     }
 }

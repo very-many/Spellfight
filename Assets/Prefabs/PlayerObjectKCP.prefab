@@ -165,7 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2880849131567615605}
   - component: {fileID: 8546185508910951106}
-  - component: {fileID: 3534730430218588825}
+  - component: {fileID: 1723578814152105765}
   m_Layer: 0
   m_Name: RotatePoint
   m_TagString: Untagged
@@ -215,7 +215,7 @@ MonoBehaviour:
   timeBetweenFiring: 0.3
   gunRotation: {x: 0, y: 0, z: 0, w: 0}
   direction: {x: 0, y: 0}
---- !u!114 &3534730430218588825
+--- !u!114 &1723578814152105765
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,7 +352,6 @@ GameObject:
   - component: {fileID: 1447455882017199148}
   - component: {fileID: -5795226678810659819}
   - component: {fileID: 4018371357647302060}
-  - component: {fileID: 4316946553626032459}
   - component: {fileID: 4546213652136251131}
   - component: {fileID: 8634550544166593634}
   - component: {fileID: 2761112431332848196}
@@ -361,7 +360,7 @@ GameObject:
   - component: {fileID: 3327559430433585903}
   - component: {fileID: 8140610524751975026}
   m_Layer: 3
-  m_Name: PlayerObject
+  m_Name: PlayerObjectKCP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,7 +395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Mirror::Mirror.NetworkIdentity
   sceneId: 0
-  _assetId: 1638502714
+  _assetId: 127453680
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -468,27 +467,6 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
---- !u!114 &4316946553626032459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7407786158499650943}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eecd006b765f0154b9c4d09c2265402f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  ConnectionID: 0
-  PlayerID: 0
-  PlayerSteamID: 0
-  PlayerName: 
-  Ready: 0
-  PlayerCosmetic: 0
 --- !u!70 &4546213652136251131
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -48,7 +48,7 @@ public class PlayerMovementController : NetworkBehaviour
 
     void Update()
     {
-        if (SceneManager.GetActiveScene().name != "Game")
+        if (!SceneManager.GetActiveScene().name.Contains("Game"))
             return;
 
         PlayerObject.SetActive(true);
