@@ -5,7 +5,6 @@
   <Project Path="Mirror.Components.csproj" />
   <Project Path="Mirror.Editor.csproj" />
   <Project Path="Mirror.Examples.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="kcp2k.csproj" />
   <Project Path="Mirror.csproj" />
   <Project Path="SimpleWebTransport.csproj" />
@@ -15,6 +14,7 @@
   <Project Path="EncryptionTransportEditor.csproj" />
   <Project Path="com.rlabrecque.steamworks.net.editor.csproj" />
   <Project Path="Telepathy.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Mirror.CompilerSymbols.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
 </Solution>

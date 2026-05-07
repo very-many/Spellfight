@@ -4,19 +4,10 @@ using UnityEngine.InputSystem;
 
 public class DirectStaff : MonoBehaviour
 {
-    public Camera camera;
     public GameObject player;
     public bool onlinePlayer = false;
     public float intensity = 1f;
     public float speed = 0.5f;
-
-
-    void Start()
-    {
-        //TODO set onlinePlayer true if the staff belongs to an online Player
-
-        camera = Camera.main;
-    }
 
     // Update is called once per frame
     void Update()
@@ -33,6 +24,7 @@ public class DirectStaff : MonoBehaviour
 
     private void FollowMouse()
     {
+        Camera camera = Camera.main;
         /* Get the mouse position in world spaaace rather than screen space. */
         var mouseWorldCoord = camera.ScreenPointToRay(Mouse.current.position.ReadValue()).origin;
 
