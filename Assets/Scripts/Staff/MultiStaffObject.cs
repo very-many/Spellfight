@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MultiStaffObject", menuName = "Scriptable Objects/MultiStaffObject")]
-public class MultiStaffObject : ScriptableObject
+public class MultiStaffObject : MonoBehaviour
 {
     public int MagicPower = 100;
     public float Recovery = 1f;

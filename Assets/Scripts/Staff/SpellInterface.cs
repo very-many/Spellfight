@@ -3,8 +3,8 @@ using UnityEngine;
 
 public interface Spell
 {
-    int recoveryTimeInMs { get; }
-    int castTimeInMs { get; }
+    float spellRecoveryTime { get; }
+    float spellCastTime { get; }
 
     void CastSpell(MultiStaffObject staff, Vector3 targetPosition, Quaternion targetRotation);
 }

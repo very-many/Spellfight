@@ -2,13 +2,12 @@ using UnityEngine;
 
 public class Firebolt : Spell
 {
-    public int recoveryTimeInMs = 2000;
+    public float fireBoltRecoveryTime = 2000;
 
-    public int castTimeInMs = 500;
+    public float fireBoltCastTime = 500;
 
-    int Spell.recoveryTimeInMs => recoveryTimeInMs;
-
-    int Spell.castTimeInMs => castTimeInMs;
+    float Spell.spellRecoveryTime => fireBoltRecoveryTime;  
+    float Spell.spellCastTime => fireBoltCastTime;
 
     public void CastSpell(MultiStaffObject staff, Vector3 targetPosition, Quaternion targetRotation)
     {
