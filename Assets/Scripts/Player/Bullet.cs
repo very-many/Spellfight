@@ -16,6 +16,8 @@ public class Bullet : NetworkBehaviour
     [SerializeField]
     private int timeToLive = 3;
     public BulletType bulletType;
+    [SerializeField]
+    private int bulletDamage = 10;
 
 
     [Header("Normal Bullets")]
@@ -125,6 +127,11 @@ public class Bullet : NetworkBehaviour
             //spawn Paritcles
             //Soundeffect
             //damage enemy
+            Health health = collision.GetComponent<Health>();
+            if (health != null)
+            {
+                health.TakeDamage(bulletDamage);
+            }
             //Screen shake
             ReturnToPoolServer();
             Debug.Log("hit");
