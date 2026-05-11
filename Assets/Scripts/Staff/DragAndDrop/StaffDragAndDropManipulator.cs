@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public class DragAndDropManipulator : PointerManipulator
@@ -43,10 +44,14 @@ public class DragAndDropManipulator : PointerManipulator
     // makes target capture the pointer, and denotes that a drag is now in progress.
     private void PointerDownHandler(PointerDownEvent evt)
     {
+        // Use local transform position
         targetStartPosition = target.transform.position;
         pointerStartPosition = evt.position;
         target.CapturePointer(evt.pointerId);
         enabled = true;
+
+        // Bring to front so it doesn't go "under" other slots while dragging
+        target.BringToFront();
     }
 
     // This method checks whether a drag is in progress and whether target has captured the pointer.
@@ -55,11 +60,15 @@ public class DragAndDropManipulator : PointerManipulator
     {
         if (enabled && target.HasPointerCapture(evt.pointerId))
         {
+            // Calculate how far the mouse has moved from the start point
             Vector3 pointerDelta = evt.position - pointerStartPosition;
 
-            target.transform.position = new Vector2(
-                Mathf.Clamp(targetStartPosition.x + pointerDelta.x, 0, target.panel.visualTree.worldBound.width),
-                Mathf.Clamp(targetStartPosition.y + pointerDelta.y, 0, target.panel.visualTree.worldBound.height));
+            // Apply that delta directly to the starting position
+            // We remove the "Clamping" logic for now to ensure it moves freely
+            target.transform.position = new Vector3(
+                targetStartPosition.x + pointerDelta.x,
+                targetStartPosition.y + pointerDelta.y,
+                0);
         }
     }
 
@@ -82,23 +91,43 @@ public class DragAndDropManipulator : PointerManipulator
     {
         if (enabled)
         {
-            VisualElement slotsContainer = root.Q<VisualElement>("slots");
+            // FIX 1: Look at the panel's visualTree (the entire window) 
+            // instead of just the immediate parent.
+            VisualElement rootVisualTree = target.panel.visualTree;
+
             UQueryBuilder<VisualElement> allSlots =
-                slotsContainer.Query<VisualElement>(className: "slot");
-            UQueryBuilder<VisualElement> overlappingSlots =
-                allSlots.Where(OverlapsTarget);
-            VisualElement closestOverlappingSlot =
-                FindClosestSlot(overlappingSlots);
-            Vector3 closestPos = Vector3.zero;
+                rootVisualTree.Query<VisualElement>(className: "slot");
+
+            VisualElement closestOverlappingSlot = null;
+            float bestDistance = float.MaxValue;
+
+            foreach (var slot in allSlots.ToList())
+            {
+                if (target.worldBound.Overlaps(slot.worldBound))
+                {
+                    float dist = Vector2.Distance(target.worldBound.center, slot.worldBound.center);
+                    if (dist < bestDistance)
+                    {
+                        bestDistance = dist;
+                        closestOverlappingSlot = slot;
+                    }
+                }
+            }
+
+            // FIX 2: Handle the move or the reset
             if (closestOverlappingSlot != null)
             {
-                closestPos = RootSpaceOfSlot(closestOverlappingSlot);
-                closestPos = new Vector2(closestPos.x - 5, closestPos.y - 5);
+                // Only move if the slot is empty (Noita style)
+                if (closestOverlappingSlot.childCount == 0)
+                {
+                    closestOverlappingSlot.Add(target);
+                }
             }
-            target.transform.position =
-                closestOverlappingSlot != null ?
-                closestPos :
-                targetStartPosition;
+
+            // FIX 3: Reset local position to zero.
+            // Because we use 'Add(target)', the spell is now a child of the slot.
+            // Setting position to Zero centers it perfectly in the new slot.
+            target.transform.position = Vector3.zero;
 
             enabled = false;
         }
