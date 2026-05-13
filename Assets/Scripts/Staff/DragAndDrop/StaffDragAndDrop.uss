@@ -63,5 +63,5 @@
     border-color: white;
     background-color: #444;
     position: relative;
-    background-image: resource("Assets/ImageAssetImports(Josa)/Sprite_MissingNo.png") !important
+    background-image: resource("Assets/Resources/Sprite_MissingNo.png") !important
 }

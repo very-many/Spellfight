@@ -115,6 +115,8 @@ public class StaffDragAndDrop : MonoBehaviour
                 // Add link to Spell to the userData of the VisualElement
                 draggableSpell.userData = spell;
 
+                Debug.Log($"Attempting to load: {spell.spellImagePath}");
+
                 // Add image from spell object
                 Sprite spellSprite = Resources.Load<Sprite>(spell.spellImagePath);
                 draggableSpell.style.backgroundImage = new StyleBackground(spellSprite);

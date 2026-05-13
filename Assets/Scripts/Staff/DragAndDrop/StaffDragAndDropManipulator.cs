@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class DragAndDropManipulator : PointerManipulator
 {
     private VisualElement _dummyIcon;
+
     // Write a constructor to set target and store a reference to the
     // root of the visual tree.
     public DragAndDropManipulator(VisualElement target)
@@ -129,12 +130,6 @@ public class DragAndDropManipulator : PointerManipulator
 
             enabled = false;
         }
-    }
-
-    private Vector3 RootSpaceOfSlot(VisualElement slot)
-    {
-        Vector2 slotWorldSpace = slot.parent.LocalToWorld(slot.layout.position);
-        return root.WorldToLocal(slotWorldSpace);
     }
 }
 

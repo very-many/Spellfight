@@ -8,7 +8,7 @@ public class Firebolt : Spell
 
     float Spell.spellRecoveryTime => fireBoltRecoveryTime;  
     float Spell.spellCastTime => fireBoltCastTime;
-    string Spell.spellImagePath => "Assets/ImageAssetImports(Josa)/Spells/Firebolt.png";
+    string Spell.spellImagePath => "Spells/Firebolt";
 
     public void CastSpell(MultiStaffObject staff, Vector3 targetPosition, Quaternion targetRotation)
     {
