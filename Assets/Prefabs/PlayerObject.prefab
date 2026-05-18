@@ -1202,6 +1202,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb4d2cf2609a5b74e99e264c06e68f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MultiStaffObject
+  player: {fileID: 0}
+  castAngle: {x: 0, y: 0, z: 0, w: 0}
+  castPosition: {x: 0, y: 0}
+  targetPosition: {x: 0, y: 0}
+  isCasting: 0
   MagicPower: 100
   Recovery: 1
   ProjectileSize: 1
