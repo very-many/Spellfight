@@ -33,6 +33,22 @@ public class SteamLobby : MonoBehaviour
 
     public void HostLobby()
     {
+        if (!SteamManager.Initialized)
+        {
+            Debug.LogError("Cannot host lobby: SteamManager not initialized.");
+            return;
+        }
+
+        if (manager == null)
+        {
+            manager = GetComponent<CustomNetworkManager>();
+            if (manager == null)
+            {
+                Debug.LogError("Cannot host lobby: CustomNetworkManager component not found on the same GameObject.");
+                return;
+            }
+        }
+
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, manager.maxConnections);
     }
 
