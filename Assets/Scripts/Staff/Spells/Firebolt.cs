@@ -12,12 +12,14 @@ public class Firebolt : Spell
     string Spell.spellImagePath => "Spells/Firebolt";
     int Spell.probabilityWeight => 10;
 
-    public void CastSpell(MultiStaffObject statStaffMulti, Vector2 castDirection, Vector2 castPosition, Quaternion targetRotation)
+    public void CastSpell(MultiStaffObject multiStaff, SingleStaff singleStaff)
     {
-        float damage = 1f * statStaffMulti.MagicPower;
-        float health = 0.1f * statStaffMulti.MagicPower;
-        float size = 0.5f * statStaffMulti.ProjectileSize;
+        float damage = 1f * multiStaff.MagicPower;
+        float health = 0.1f * multiStaff.MagicPower;
+        float size = 0.5f * multiStaff.ProjectileSize;
 
-        statStaffMulti.spellcasting.castBullet(castDirection, castPosition, targetRotation, damage, health, size, new List<Bullet.BulletType> { Bullet.BulletType.Normal });
+        DirectStaff directionalInfo = multiStaff.directionalInfo;
+
+        multiStaff.spellcasting.castBullet(directionalInfo.castDirection, directionalInfo.castPosition, directionalInfo.castAngle, damage, health, size, new List<Bullet.BulletType> { Bullet.BulletType.Normal });
     }
 }

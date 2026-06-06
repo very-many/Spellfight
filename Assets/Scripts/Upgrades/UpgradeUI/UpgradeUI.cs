@@ -14,12 +14,30 @@ public class UpgradeUI : MonoBehaviour
     
     private List<Upgrade> _upgradeChoices = new List<Upgrade>();
     private VisualElement _root;
+    private PlayerMenuCaller _caller;
 
     public void Start()
     {
-        GetRandomizedUpgrades();
+        _root = GetComponent<UIDocument>().rootVisualElement;
+            
+        _root.visible = false;
 
+        _root.RegisterCallback<PointerDownEvent>(PointerDownHandler);
+    }
+
+    public void OpenUI(PlayerMenuCaller caller)
+    {
+        _caller = caller;
+        _root.visible = true;
+        GetRandomizedUpgrades();
         InitializeUI();
+    }
+
+    public void CloseUI()
+    {
+        _root.visible = false;
+        _upgradeChoices.Clear();
+        _root.Clear();
     }
 
     private void GetRandomizedUpgrades()
@@ -34,9 +52,7 @@ public class UpgradeUI : MonoBehaviour
 
     private void InitializeUI()
     {
-        _root = GetComponent<UIDocument>().rootVisualElement;
-
-        if (styleSheet != null) _root.styleSheets.Add(styleSheet);
+        if (styleSheet != null) { _root.styleSheets.Add(styleSheet); }      
 
         // Main Container
         VisualElement mainContainer = new VisualElement();
@@ -53,7 +69,7 @@ public class UpgradeUI : MonoBehaviour
         mainContainer.Add(row2);
 
         // Loop through choices
-        for (int i = 0; i < _upgradeChoices.Count; i++)
+        for (int i = 0; i < _upgradeChoices.Count;  i++)
         {
             var upgradeChoice = _upgradeChoices[i];
             VisualElement currentRow = i < 2 ? row1 : row2;
@@ -86,6 +102,15 @@ public class UpgradeUI : MonoBehaviour
         }
     }
 
+    private void PointerDownHandler(PointerDownEvent evt)
+    {
+        VisualElement selectedUpgrade = evt.target as VisualElement;
+
+        if (!(selectedUpgrade is Button)) { selectedUpgrade = selectedUpgrade.parent;  }
+
+        ChooseUpgrade(selectedUpgrade as Button);
+    }
+
     private void ChooseUpgrade(Button upgradeChoiceCard)
     {
         Upgrade selectedUpgrade = upgradeChoiceCard.userData as Upgrade;
@@ -94,6 +119,8 @@ public class UpgradeUI : MonoBehaviour
 
         playerMainCoordinator.ApplyUpgrades();
 
-        // Code to start SpellPickerUI here
+        CloseUI();
+
+        _caller.OpenDragAndDrop();
     }
 }

@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Timers;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
-using System.Threading.Tasks;
+using static UnityEngine.LowLevelPhysics2D.PhysicsShape;
 
 public class SingleStaff
 {
     public MultiStaffObject ParentStaffMulti;
     public List<Spell> SpellList;
     public float spellCoolDownTimer = 0;
-
-    private bool isCasting = false;
+    private float castTimer = 0;
 
     public SingleStaff(MultiStaffObject parentStaffMulti, List<Spell> spellList)
     {
@@ -24,7 +26,12 @@ public class SingleStaff
         }
     }
 
-    public void CastSpells(MultiStaffObject staffMulti, InputAction.CallbackContext context, Vector2 castDirection, Vector2 castPosition, Quaternion targetRotation)
+    public void UpdateSpells(List<Spell> newSpellList)
+    {
+        SpellList = newSpellList;
+    }
+
+    public void CastSpells(MultiStaffObject staffMulti, InputAction.CallbackContext context)
     {
         if (spellCoolDownTimer > 0)
         {
@@ -32,29 +39,44 @@ public class SingleStaff
             return;
         }
 
-        float cooldownTime = 0;
+        staffMulti.StartCoroutine(CastSequence(staffMulti, context));
 
-        foreach (Spell spell in SpellList)
-        {
-            CastTime(spell.spellCastTime);
-
-            spell.CastSpell(staffMulti, castDirection, castPosition, targetRotation);
-            cooldownTime = cooldownTime + (spell.spellRecoveryTime/ParentStaffMulti.Recovery);
-
-            while (isCasting) { var v = Task.Yield(); } // Wait until the cast time is over before proceeding to the next spell
-
-            if (false || cooldownTime > 10) { break; }
-            if (context.canceled) { break; }
-        }
-        spellCoolDownTimer = cooldownTime;
         staffMulti.FinishCast();
     }
 
-    IEnumerator CastTime(float duration)
+    public static void Delay(int time)
     {
-        isCasting = true;
-        yield return new WaitForSeconds(duration);
-        isCasting = false;
+        var t = Task.Run(async delegate
+        {
+            await Task.Delay(time);
+            return 0;
+        });
+        t.Wait();
+    }
+
+    IEnumerator WaitForCast()
+    {
+        while (castTimer > 0)
+            yield return null;
+    }
+
+    private IEnumerator CastSequence(MultiStaffObject staffMulti, InputAction.CallbackContext context)
+    {
+        float cooldownTime = 0;
+        foreach (Spell spell in SpellList)
+        {
+            castTimer = spell.spellCastTime;
+
+            spell.CastSpell(staffMulti, this);
+            cooldownTime = cooldownTime + (spell.spellRecoveryTime / ParentStaffMulti.Recovery * 100);
+
+            yield return staffMulti.StartCoroutine(WaitForCast());
+
+            if (cooldownTime > 10) { break; }
+            if (!context.action.IsPressed()){ break; }
+        }
+
+        spellCoolDownTimer = cooldownTime;
     }
 
 
@@ -66,6 +88,10 @@ public class SingleStaff
     public void FrameTicUpdate() { 
         if (spellCoolDownTimer > 0) {
             spellCoolDownTimer -= Time.deltaTime;
+        }
+        if (castTimer > 0)
+        {
+            castTimer -= Time.deltaTime;
         }
     }
 }

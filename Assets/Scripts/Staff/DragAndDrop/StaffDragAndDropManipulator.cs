@@ -68,7 +68,7 @@ public class DragAndDropManipulator : PointerManipulator
         VisualElement dragLayer = target.panel.visualTree.Q("drag-layer");
         dragLayer.Add(_dummyIcon);
 
-        // hide originaö
+        // hide original
         target.style.visibility = Visibility.Hidden;
     }
 

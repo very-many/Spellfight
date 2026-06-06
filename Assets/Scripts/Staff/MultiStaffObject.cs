@@ -11,15 +11,13 @@ public class MultiStaffObject : MonoBehaviour {
     public Spellcasting spellcasting;
 
     public float MagicPower = 100;
-    public float Recovery = 1f;
+    public float Recovery = 100f;
     public float ProjectileSize = 1f;
     public float ProjectileSpeed = 1f;
 
     public SingleStaff Staff_1;
     public SingleStaff Staff_2;
     public SingleStaff Staff_3;
-
-    public List<Spell> Spellstorage;
 
     //TODO needs a connection to the player and to use the players Update Function
     public void Update()
@@ -40,29 +38,47 @@ public class MultiStaffObject : MonoBehaviour {
         Staff_1 = new SingleStaff(this, new List<Spell> { new Firebolt() });
         Staff_2 = new SingleStaff(this, null);
         Staff_3 = new SingleStaff(this, null);
-        Spellstorage = new List<Spell>();
+    }
+
+    public void UpdateSpells(List<Spell> staff1Spells, List<Spell> staff2Spells, List<Spell> staff3Spells)
+    {
+        Staff_1.UpdateSpells(staff1Spells);
+        Staff_2.UpdateSpells(staff2Spells);
+        Staff_3.UpdateSpells(staff3Spells);
     }
 
 
     public void OnCast_1(InputAction.CallbackContext context)
     {
+        if (!context.started)
+        {
+            return;
+        }
         if (castBlocked) { return; }
         castBlocked = true;
-        Staff_1.CastSpells(this, context, directionalInfo.castDirection, directionalInfo.castPosition, directionalInfo.castAngle);
+        Staff_1.CastSpells(this, context);
     }
 
     public void OnCast_2(InputAction.CallbackContext context)
     {
+        if (!context.started)
+        {
+            return;
+        }
         if (castBlocked) { return; }
         castBlocked = true;
-        Staff_2.CastSpells(this, context, directionalInfo.castDirection, directionalInfo.castPosition, directionalInfo.castAngle);
+        Staff_2.CastSpells(this, context);
     }
 
     public void OnCast_3(InputAction.CallbackContext context)
     {
+        if (!context.started)
+        {
+            return;
+        }
         if (castBlocked) { return; }
         castBlocked = true;
-        Staff_3.CastSpells(this, context, directionalInfo.castDirection, directionalInfo.castPosition, directionalInfo.castAngle);
+        Staff_3.CastSpells(this, context);
     }
 
     public void FinishCast()
