@@ -21,7 +21,7 @@ public class Health : NetworkBehaviour
 
     public void SetMaxHealth(int newMaxHealth)
     {
-        float relativeAmount = currentHealth / maxHealth;
+        float relativeAmount = (float)currentHealth / maxHealth;
         maxHealth = newMaxHealth;
         currentHealth = (int)(relativeAmount * newMaxHealth);
 
