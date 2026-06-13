@@ -4,14 +4,11 @@ using static Bullet;
 
 public class Firebolt : Spell
 {
-    public float fireBoltRecoveryTime = 2;
-
-    public float fireBoltCastTime = 0.2f;
 
     public string spellTitle => "Firebolt";
 
-    float Spell.spellRecoveryTime => fireBoltRecoveryTime;  
-    float Spell.spellCastTime => fireBoltCastTime;
+    float Spell.spellRecoveryTime => 2f;
+    float Spell.spellCastTime => 0.2f;
     string Spell.spellImagePath => "Spells/Firebolt";
     int Spell.probabilityWeight => 10;
 
@@ -19,13 +16,13 @@ public class Firebolt : Spell
     {
         List<BulletType> bulletTypes = new List<BulletType> { Bullet.BulletType.Normal };
         float bulletDamage = 1f * multiStaff.bulletDamageMult * multiStaff.MagicPower;
-        float bulletHealth = 0.1f * multiStaff.bulletHealthMult * multiStaff.MagicPower;
+        float bulletHealth = 0.5f * multiStaff.bulletHealthMult * multiStaff.MagicPower;
         float bulletSize = 0.12f * multiStaff.ProjectileSize;
         float bulletSpeed = multiStaff.ProjectileSpeed;
 
         DirectStaff directionalInfo = multiStaff.directionalInfo;
 
-        BulletStats bulletStats = new BulletStats(bulletTypes, bulletDamage, bulletHealth, bulletSize, bulletSpeed, Color.orange, multiStaff.player);
+        BulletStats bulletStats = new BulletStats(bulletTypes, bulletDamage, bulletHealth, bulletSize, bulletSpeed, Color.orangeRed, multiStaff.player);
 
         multiStaff.spellcasting.CastBullet(directionalInfo.castDirection, directionalInfo.castPosition, directionalInfo.castAngle, bulletStats);
     }

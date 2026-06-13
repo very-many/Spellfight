@@ -6,7 +6,7 @@ public class SpellLibrary : MonoBehaviour
 {
     public static SpellLibrary instance;
 
-    private List<Spell> _allSpellList = new List<Spell> { new Firebolt(), new Jump()};
+    private List<Spell> _allSpellList = new List<Spell> { new Firebolt(), new Jump(), new AcidSpray(), new LightningBolt()};
 
     public Spell RandomSpell()
     {

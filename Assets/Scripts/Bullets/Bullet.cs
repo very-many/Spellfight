@@ -1,19 +1,23 @@
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : NetworkBehaviour
 {
-
+    private SpriteRenderer renderer;
     private Rigidbody2D rb;
     Vector2 direction;
 
     [Header("Bullet Stats")]
     [SerializeField]
     private LayerMask whatDestroysBullet;
+    [SerializeField]
+    private LayerMask bulletPlayerCollision;
     [SerializeField]
     private LayerMask otherBulletsCollision;
     [SerializeField]
@@ -27,6 +31,7 @@ public class Bullet : NetworkBehaviour
     private float bulletHealth;
     private float bulletSize;
     private float bulletSpeed;
+    private int bounces;
 
     private GameObject _owner;
 
@@ -40,18 +45,23 @@ public class Bullet : NetworkBehaviour
     [SerializeField]
     private float physicsBulletGravity;
 
+
+
     private float _disableTime;
     private float _escapeTime;
+
 
     public enum BulletType
     {
         Normal, //straight velocity, no gravity
         Physics, //affected by gravity, rotates in direction of velocity
+        Bounce, //bounces off surfaces a certain amount of times before being destroyed
     }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        renderer = GetComponent<SpriteRenderer>();
     }
 
     void OnEnable()
@@ -133,8 +143,9 @@ public class Bullet : NetworkBehaviour
         this.bulletHealth = stats.bulletHealth;
         this.bulletSize = stats.bulletSize;
         this.bulletSpeed = stats.bulletSpeed;
-        //this.bulletColor = stats.bulletColor;
+        renderer.material.color = stats.bulletColor;
         this._owner = stats.owner;
+        this.bounces = stats.bounces;
     }
 
     private void InitializeBulletType()
@@ -167,8 +178,32 @@ public class Bullet : NetworkBehaviour
     {
         if (!isServer) return;
 
-        //collision is within layermask
-        if ((whatDestroysBullet.value & (1 << collision.gameObject.layer)) > 0)
+        if ((otherBulletsCollision.value & (1 << collision.gameObject.layer)) > 0)
+        {
+
+            //spawn Paritcles
+            //Soundeffect
+
+            Bullet bullet = collision.GetComponent<Bullet>();
+
+            if (!(_owner = bullet._owner)) {
+                if (bullet != null)
+                {
+                    bullet.bulletHealth -= bulletDamage;
+                    this.bulletHealth -= bullet.bulletDamage;
+                    if (bullet.bulletHealth <= 0)
+                    {
+                        bullet.ReturnToPoolServer();
+                    }
+                    if (this.bulletHealth <= 0)
+                    {
+                        ReturnToPoolServer();
+                    }
+                }
+            }
+        }
+
+        if ((bulletPlayerCollision.value & (1 << collision.gameObject.layer)) > 0)
         {
             //spawn Paritcles
             //Soundeffect
@@ -182,30 +217,38 @@ public class Bullet : NetworkBehaviour
             }
             //Screen shake
             ReturnToPoolServer();
-            Debug.Log("hit");
+            Debug.Log("hit Player");
         }
 
-        if ((otherBulletsCollision.value & (1 << collision.gameObject.layer)) > 0)
+        //collision is within layermask
+        if ((whatDestroysBullet.value & (1 << collision.gameObject.layer)) > 0)
         {
-
             //spawn Paritcles
             //Soundeffect
 
-            Bullet bullet = collision.GetComponent<Bullet>();
-
-            if (bullet != null)
+            if (bulletTypes.Contains(BulletType.Bounce) && bounces > 0)
             {
-                bullet.bulletHealth -= bulletDamage;
-                this.bulletHealth -= bullet.bulletDamage;
-                if (bullet.bulletHealth <= 0)
+                bounces--;
+                Vector2 inDirection = rb.linearVelocity.normalized;
+                Vector2 raycastOrigin = (Vector2)transform.position - (inDirection * 0.5f);
+                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, inDirection, 1.5f, whatDestroysBullet);
+                if (hit.collider != null)
                 {
-                    bullet.ReturnToPoolServer();
-                }
-                if (this.bulletHealth <= 0)
-                {
-                    ReturnToPoolServer();
+                    Vector2 inNormal = hit.normal;
+                    Vector2 newDirection = Vector2.Reflect(inDirection, inNormal);
+
+                    float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
+                    Quaternion rotation = Quaternion.Euler(0, 0, angle);
+
+                    transform.SetPositionAndRotation(transform.position, rotation * Quaternion.Euler(0, 0, -90));
+                    rb.linearVelocity = newDirection * rb.linearVelocity.magnitude;
+                    return;
                 }
             }
+
+            //Screen shake
+            ReturnToPoolServer();
+            Debug.Log("hit Wall");
         }
     }
 

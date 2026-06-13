@@ -103,7 +103,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 1, g: 0.47387898, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -202,16 +202,15 @@ MonoBehaviour:
   syncInterval: 0
   whatDestroysBullet:
     serializedVersion: 2
-    m_Bits: 72
-  otherBullets:
+    m_Bits: 64
+  bulletPlayerCollision:
+    serializedVersion: 2
+    m_Bits: 8
+  otherBulletsCollision:
     serializedVersion: 2
     m_Bits: 128
   timeToLive: 3
-  bulletTypes: 01000000
-  bulletDamage: 10
-  bulletHealth: 1
-  bulletSize: 1
-  bulletSpeed: 1
+  timeToEscape: 0.2
   normalBulletSpeed: 15
   physicsBulletSpeed: 15
   physicsBulletGravity: 3

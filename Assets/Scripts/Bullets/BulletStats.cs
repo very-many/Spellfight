@@ -16,6 +16,8 @@ public class BulletStats
 
     public GameObject owner;
 
+    public int bounces = 3;
+
     //public float bulletScaleX = 1;
     //public float bulletScaleY = 1;
 
@@ -38,5 +40,14 @@ public class BulletStats
         this.bulletSpeed = bulletSpeed;
         this.bulletColor = bulletColor;
         this.owner = owner;
+    }
+
+    public BulletStats Clone()
+    {
+        BulletStats bulletStats = new BulletStats(bulletTypes, bulletDamage, bulletHealth, bulletSize, bulletSpeed, bulletColor, owner);
+
+        bulletStats.bounces = bounces;
+
+        return bulletStats;
     }
 }

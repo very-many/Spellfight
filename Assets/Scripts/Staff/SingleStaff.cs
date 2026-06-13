@@ -42,16 +42,6 @@ public class SingleStaff
         staffMulti.StartCoroutine(CastSequence(staffMulti, context));
     }
 
-    public static void Delay(int time)
-    {
-        var t = Task.Run(async delegate
-        {
-            await Task.Delay(time);
-            return 0;
-        });
-        t.Wait();
-    }
-
     IEnumerator WaitForCast()
     {
         while (castTimer > 0)

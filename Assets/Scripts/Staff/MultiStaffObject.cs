@@ -1,5 +1,7 @@
 using Mirror;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -57,23 +59,33 @@ public class MultiStaffObject : NetworkBehaviour {
 
     public void OnCast_1(InputAction.CallbackContext context)
     {
-        if (!context.started || !isOwned || castBlocked) { return; }    
-        castBlocked = true;
-        Staff_1.CastSpells(this, context);
+        if (!context.started ||!isOwned) { return; }
+        this.StartCoroutine(CastSequence(Staff_1, context));
+
     }
 
     public void OnCast_2(InputAction.CallbackContext context)
     {
-        if (!context.started || !isOwned || castBlocked) { return; }
-        castBlocked = true;
-        Staff_2.CastSpells(this, context);
+        if (!context.started || !isOwned) { return; }
+        this.StartCoroutine(CastSequence(Staff_2, context));
     }
 
     public void OnCast_3(InputAction.CallbackContext context)
     {
-        if (!context.started || !isOwned || castBlocked) { return; }
+        if (!context.started || !isOwned) { return; }
+        this.StartCoroutine(CastSequence(Staff_3, context));
+    }
+
+    private IEnumerator CastSequence(SingleStaff singleStaff, InputAction.CallbackContext context)
+    {
+        while (castBlocked && !context.canceled)
+        {
+            yield return null;
+        }
+        if (castBlocked) { yield break; }
         castBlocked = true;
-        Staff_3.CastSpells(this, context);
+        singleStaff.CastSpells(this, context);
+        yield return null;
     }
 
     public void FinishCast()
