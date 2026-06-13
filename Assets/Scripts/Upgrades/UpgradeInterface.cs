@@ -5,6 +5,8 @@ public interface Upgrade
 {
     string upgradeImagePath { get; }
 
+    string upgradeTitle { get; }
+
     string upgradeDescription { get; }
 
     int probabilityWeight { get; }

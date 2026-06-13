@@ -824,6 +824,7 @@ MonoBehaviour:
   canMove: 1
   wallJumped: 0
   wallSlide: 0
+  jumped: 0
   side: 1
   movement: {x: 0, y: 0}
 --- !u!114 &6517591035741378657
@@ -1036,6 +1037,8 @@ MonoBehaviour:
   playerUI: {fileID: 0}
   MagicPower: 100
   Recovery: 100
+  bulletDamageMult: 1
+  bulletHealthMult: 1
   ProjectileSize: 1
   ProjectileSpeed: 1
 --- !u!114 &3688680632892157790
@@ -1067,6 +1070,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   bullet: {fileID: 5995972970576921285, guid: f9fbd1683bccf5845bacd0465a610ad5, type: 3}
+  playerMovement: {fileID: 0}
 --- !u!114 &3227256166308750262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1082,8 +1086,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  UpgradeUI: {fileID: 0}
-  StaffManager: {fileID: 0}
+  upgradeUI: {fileID: 0}
+  staffManager: {fileID: 0}
+  playerUI: {fileID: 0}
   coordinator: {fileID: 0}
 --- !u!114 &4963407450501170020
 MonoBehaviour:

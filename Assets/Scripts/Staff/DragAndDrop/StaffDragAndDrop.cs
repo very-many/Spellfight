@@ -100,7 +100,7 @@ public class StaffDragAndDrop : MonoBehaviour
     private void AcceptChanges()
     {
         StoreSpells();
-        CloseUI();
+        _caller.CloseDragAndDrop();
     }
 
     private void CreateDragLayer()

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public interface Spell
 {
+    string spellTitle { get; }
     float spellRecoveryTime { get; }
     float spellCastTime { get; }
     string spellImagePath { get; }

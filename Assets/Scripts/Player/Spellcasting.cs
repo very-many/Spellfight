@@ -11,6 +11,13 @@ public class Spellcasting : NetworkBehaviour
 {
     public GameObject bullet;
 
+    public PlayerMovementController playerMovement;
+
+    private void Start()
+    {
+        playerMovement = GetComponent<PlayerMovementController>();
+    }
+
     public void CastBullet(Vector2 castDirection, Vector2 castPosition, Quaternion targetRotation, BulletStats bulletStats)
     {
         CmdCastBullet(castDirection, castPosition, targetRotation, bulletStats);
@@ -42,5 +49,16 @@ public class Spellcasting : NetworkBehaviour
         {
             bulletScript.Cast(castDirection, targetRotation, castPosition, bulletStats);
         }
+    }
+
+    public void Jump()
+    {
+        CmdJump();
+    }
+
+    [Command]
+    private void CmdJump()
+    {
+        playerMovement.SpellJump(Vector2.up);
     }
 }

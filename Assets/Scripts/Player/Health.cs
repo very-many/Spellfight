@@ -19,6 +19,16 @@ public class Health : NetworkBehaviour
         healthBar.SetMaxHealth(maxHealth);
     }
 
+    public void SetMaxHealth(int newMaxHealth)
+    {
+        float relativeAmount = currentHealth / maxHealth;
+        maxHealth = newMaxHealth;
+        currentHealth = (int)(relativeAmount * newMaxHealth);
+
+        healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetHealth(currentHealth);
+    }
+
     public void TakeDamage(int damage)
     {
         if (!isServer) 

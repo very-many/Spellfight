@@ -94,7 +94,12 @@ public class UpgradeUI : MonoBehaviour
             upgradeText.AddToClassList("upgrade-text");
             upgradeText.text = upgradeChoice.upgradeDescription;
 
+            Label upgradeTitle = new Label();
+            upgradeTitle.AddToClassList("upgrade-title");
+            upgradeTitle.text = upgradeChoice.upgradeTitle;
+
             // Hierarchy
+            upgradeChoiceCard.Add(upgradeTitle);
             upgradeChoiceCard.Add(upgradeIcon);
             upgradeChoiceCard.Add(upgradeText);
             currentRow.Add(upgradeChoiceCard);

@@ -8,6 +8,8 @@ public class Firebolt : Spell
 
     public float fireBoltCastTime = 0.2f;
 
+    public string spellTitle => "Firebolt";
+
     float Spell.spellRecoveryTime => fireBoltRecoveryTime;  
     float Spell.spellCastTime => fireBoltCastTime;
     string Spell.spellImagePath => "Spells/Firebolt";

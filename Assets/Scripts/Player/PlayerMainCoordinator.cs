@@ -67,7 +67,7 @@ public class PlayerMainCoordinator : MonoBehaviour
         SetStaffProjectileSpeed(_baseProjectileSpeed);
     }
 
-    public void SetMaxHealth(int maxHealth) { healthObject.maxHealth = maxHealth; }
+    public void SetMaxHealth(int maxHealth) { healthObject.SetMaxHealth(maxHealth); }
     public int GetMaxHealth () {  return healthObject.maxHealth; }
     public int GetCurrentHealth() { return healthObject.currentHealth; }
 

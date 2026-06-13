@@ -5,9 +5,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerMenuCaller : NetworkBehaviour
 {
-    public UpgradeUI UpgradeUI;
+    public UpgradeUI upgradeUI;
 
-    public StaffDragAndDrop StaffManager;
+    public StaffDragAndDrop staffManager;
+
+    public PlayerUI playerUI;
 
     public PlayerMainCoordinator coordinator;
 
@@ -15,26 +17,35 @@ public class PlayerMenuCaller : NetworkBehaviour
     {
         if (!isOwned) return;
 
-        this.UpgradeUI = GameObject.FindGameObjectWithTag("UpgradePicker").GetComponent<UpgradeUI>();
-        this.StaffManager = GameObject.FindGameObjectWithTag("StaffInventory").GetComponent<StaffDragAndDrop>();
+        this.upgradeUI = GameObject.FindGameObjectWithTag("UpgradePicker").GetComponent<UpgradeUI>();
+        this.staffManager = GameObject.FindGameObjectWithTag("StaffInventory").GetComponent<StaffDragAndDrop>();
+        this.playerUI = GetComponent<PlayerUI>();
         coordinator = GetComponent<PlayerMainCoordinator>();
 
-        UpgradeUI.playerMainCoordinator = coordinator;
+        upgradeUI.playerMainCoordinator = coordinator;
 
-        StaffManager.playerMainCoordinator = coordinator;
+        staffManager.playerMainCoordinator = coordinator;
 
-        StaffManager.staffMulti = coordinator.GetMultiStaffObject();
+        staffManager.staffMulti = coordinator.GetMultiStaffObject();
+
+        playerUI.StartUI();
     }
 
     public void OnChooseUpgrade(InputAction.CallbackContext context)
     {
         if (!context.performed || !isOwned) return;
-        
-        UpgradeUI.OpenUI(this);
+        playerUI.StopUI();
+        upgradeUI.OpenUI(this);
     }
 
     public void OpenDragAndDrop()
     {
-        StaffManager.OpenUI(this);
+        staffManager.OpenUI(this);
+    }
+
+    public void CloseDragAndDrop()
+    {
+        staffManager.CloseUI();
+        playerUI.StartUI();
     }
 }

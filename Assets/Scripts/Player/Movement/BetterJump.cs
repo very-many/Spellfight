@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 public class BetterJumping : NetworkBehaviour
 {
     private Rigidbody2D rb;
+    private PlayerMovementController playerMovement;
 
     [Header("Input Action - Jump")]
     [SerializeField]
@@ -16,19 +17,24 @@ public class BetterJumping : NetworkBehaviour
     [Space]
     [Header("Stats")]
     public float FallMultiplier = 2.5f;
-    public float LowJumpMultiplier = 2f;
+    public float LowJumpMultiplier = 1.9f;
+    public float VeryLowJumpMultiplier = 1.7f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerMovement = GetComponent<PlayerMovementController>();
     }
 
     void Update()
     {
         if (!isOwned)
             return;
-
-        if (rb.linearVelocity.y < 0)
+        if (playerMovement.floatyTimeInSec > 0)
+        {
+            rb.linearVelocity += (VeryLowJumpMultiplier - 1) * Physics2D.gravity.y * Time.deltaTime * Vector2.up;
+        }
+        else if (rb.linearVelocity.y < 0 || !playerMovement.jumped)
         {
             rb.linearVelocity += (FallMultiplier - 1) * Physics2D.gravity.y * Time.deltaTime * Vector2.up;
         }

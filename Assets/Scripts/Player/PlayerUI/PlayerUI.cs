@@ -1,3 +1,4 @@
+using Mirror.Examples.Basic;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -15,15 +16,42 @@ public class PlayerUI : MonoBehaviour
 
     List<VisualElement> dynamicIcons = new List<VisualElement> { null, null, null };
 
-    public void Start()
+    public void StartUI()
+    {
+        staffMulti = GetComponent<MultiStaffObject>();
+        staffMulti.playerUI = this;
+        if (staffMulti == null || !staffMulti.isOwned) return;
+
+        EmptyUI();
+
+        InitializeUI();
+    }
+
+    public void StopUI()
+    {
+        EmptyUI();
+    }
+
+    private void EmptyUI()
+    {
+        if (_root != null)
+        {
+            _root.Clear();
+            _root.visible = false;
+        }
+    }
+
+    public void RefreshUI()
     {
         if (staffMulti == null || !staffMulti.isOwned) return;
-        InitializeUI();
+        InsertSpells();
     }
 
     private void InitializeUI()
     {
         _root = GetComponent<UIDocument>().rootVisualElement;
+
+        _root.visible = true;
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Player/PlayerUI/PlayerUI.uss");
         if (styleSheet != null) _root.styleSheets.Add(styleSheet);
@@ -151,7 +179,7 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
-        if (staffMulti == null) return;
+        if (staffMulti == null || dynamicIcons[0] == null || dynamicIcons[1] == null || dynamicIcons[2] == null) return;
 
         if (staffMulti.Staff_1.spellCoolDownTimer > 0)
         {

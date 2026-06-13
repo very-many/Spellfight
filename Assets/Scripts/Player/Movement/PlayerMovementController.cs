@@ -30,8 +30,11 @@ public class PlayerMovementController : NetworkBehaviour
     public bool canMove;
     public bool wallJumped;
     public bool wallSlide;
+    public bool jumped;
 
     public int side = 1;
+
+    public float floatyTimeInSec = 0;
 
     [Space]
     [Header("Input")]
@@ -101,6 +104,7 @@ public class PlayerMovementController : NetworkBehaviour
         if (coll.onGround)
         {
             wallJumped = false;
+            jumped = false;
         }
 
         if (coll.onWall && !coll.onGround && x != 0)
@@ -117,6 +121,11 @@ public class PlayerMovementController : NetworkBehaviour
             side = 1;
         else if (x < 0)
             side = -1;
+
+        if (floatyTimeInSec > 0)
+        {
+            floatyTimeInSec -= Time.deltaTime;
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -179,6 +188,7 @@ public class PlayerMovementController : NetworkBehaviour
 
     private void Jump(Vector2 dir)
     {
+        jumped = true;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
         rb.linearVelocity += dir * jumpForce;
     }
@@ -188,5 +198,13 @@ public class PlayerMovementController : NetworkBehaviour
         canMove = false;
         yield return new WaitForSeconds(time);
         canMove = true;
+    }
+
+    public void SpellJump(Vector2 dir)
+    {
+        jumped = false;
+        floatyTimeInSec = 1;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
+        rb.linearVelocity += dir * 12;
     }
 }

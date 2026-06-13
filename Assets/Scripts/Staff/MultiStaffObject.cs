@@ -23,7 +23,7 @@ public class MultiStaffObject : NetworkBehaviour {
     public SingleStaff Staff_2;
     public SingleStaff Staff_3;
 
-    //TODO needs a connection to the player and to use the players Update Function
+
     public void Update()
     {
         if (!isOwned) return;
@@ -44,10 +44,7 @@ public class MultiStaffObject : NetworkBehaviour {
 
         Staff_1 = new SingleStaff(this, new List<Spell> { new Firebolt() });
         Staff_2 = new SingleStaff(this, null);
-        Staff_3 = new SingleStaff(this, null);
-
-        playerUI = GetComponent<PlayerUI>();
-        playerUI.staffMulti = this;
+        Staff_3 = new SingleStaff(this, new List<Spell> { new Jump()});
     }
 
     public void UpdateSpells(List<Spell> staff1Spells, List<Spell> staff2Spells, List<Spell> staff3Spells)
@@ -55,8 +52,6 @@ public class MultiStaffObject : NetworkBehaviour {
         Staff_1.UpdateSpells(staff1Spells);
         Staff_2.UpdateSpells(staff2Spells);
         Staff_3.UpdateSpells(staff3Spells);
-
-        playerUI.InsertSpells();
     }
 
 

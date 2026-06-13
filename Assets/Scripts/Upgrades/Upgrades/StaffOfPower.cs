@@ -5,6 +5,8 @@ public class StaffOfPower : Upgrade
 {
     public string upgradeImagePath => "Upgrades/Staff_Of_Power";
 
+    public string upgradeTitle => "Staff Of Power";
+
     public string upgradeDescription => "Increases your magic power by " + _magicPowerIncrease + " and increases your bullet damage by 1%";
 
     public int probabilityWeight => 20;

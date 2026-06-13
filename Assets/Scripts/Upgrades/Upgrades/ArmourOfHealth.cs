@@ -4,6 +4,8 @@ public class ArmourOfHealth :Upgrade
 {
     public string upgradeImagePath => "Upgrades/Armour_Of_Health";
 
+    public string upgradeTitle => "Armour of Health";
+
     public string upgradeDescription => "Increases your health by " + _healthIncrease + " and increases your bullet health by 3%";
 
     public int probabilityWeight => 20;
