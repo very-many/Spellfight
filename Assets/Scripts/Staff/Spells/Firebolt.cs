@@ -14,7 +14,7 @@ public class Firebolt : Spell
 
     public void CastSpell(MultiStaffObject multiStaff, SingleStaff singleStaff)
     {
-        List<BulletType> bulletTypes = new List<BulletType> { Bullet.BulletType.Normal };
+        List<BulletType> bulletTypes = new List<BulletType> { Bullet.BulletType.Normal, BulletType.Trail };
         float bulletDamage = 1f * multiStaff.bulletDamageMult * multiStaff.MagicPower;
         float bulletHealth = 0.5f * multiStaff.bulletHealthMult * multiStaff.MagicPower;
         float bulletSize = 0.12f * multiStaff.ProjectileSize;
@@ -23,6 +23,8 @@ public class Firebolt : Spell
         DirectStaff directionalInfo = multiStaff.directionalInfo;
 
         BulletStats bulletStats = new BulletStats(bulletTypes, bulletDamage, bulletHealth, bulletSize, bulletSpeed, Color.orangeRed, multiStaff.player);
+
+        bulletStats.trailLength = 0.04f;
 
         multiStaff.spellcasting.CastBullet(directionalInfo.castDirection, directionalInfo.castPosition, directionalInfo.castAngle, bulletStats);
     }

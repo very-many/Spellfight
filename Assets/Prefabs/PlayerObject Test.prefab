@@ -826,6 +826,7 @@ MonoBehaviour:
   wallSlide: 0
   jumped: 0
   side: 1
+  floatyTimeInSec: 0
   movement: {x: 0, y: 0}
 --- !u!114 &6517591035741378657
 MonoBehaviour:
@@ -975,6 +976,7 @@ MonoBehaviour:
   JumpAction: {fileID: 3087997780289999494, guid: cf621cf4127fe3b4c9c12a161e6e9321, type: 3}
   FallMultiplier: 3
   LowJumpMultiplier: 8
+  VeryLowJumpMultiplier: 1.7
 --- !u!114 &8140610524751975026
 MonoBehaviour:
   m_ObjectHideFlags: 0

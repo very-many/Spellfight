@@ -59,6 +59,18 @@ public class Spellcasting : NetworkBehaviour
     [Command]
     private void CmdJump()
     {
+        if (playerMovement == null) { return; }
         playerMovement.SpellJump(Vector2.up);
+    }
+
+    public void Explosion(Vector2 explosionPosition, float explosionRadius, float explosionDamage, float explosionDamageMultMaxRange)
+    {
+        CmdExplosion(explosionPosition, explosionRadius, explosionDamage, explosionDamageMultMaxRange);
+    }
+
+    [Command]
+    private void CmdExplosion(Vector2 explosionPosition, float explosionRadius, float explosionDamage, float explosionDamageMultMaxRange)
+    {
+        Debug.Log("Explosion is not implemented thus far... cough... eh... *BOOM*");
     }
 }

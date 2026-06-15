@@ -16,7 +16,19 @@ public class BulletStats
 
     public GameObject owner;
 
+    public float timeToLive = 5;
+    public float timeToEscape = 0.2f;
+
+    public float trailLength = 1;
+
     public int bounces = 3;
+
+    public List<BulletStats> splitBullets = new List<BulletStats>();
+    public float splitAngleOffset = 0;
+
+    public float explosionRadius = 0;
+    public float explosionDamage = 0;
+    public float explosionDamageMultMaxRange = 1;
 
     //public float bulletScaleX = 1;
     //public float bulletScaleY = 1;
@@ -46,7 +58,19 @@ public class BulletStats
     {
         BulletStats bulletStats = new BulletStats(bulletTypes, bulletDamage, bulletHealth, bulletSize, bulletSpeed, bulletColor, owner);
 
+        bulletStats.trailLength = trailLength;
+
+        bulletStats.timeToLive = timeToLive;
+        bulletStats.timeToEscape = timeToEscape;
+
         bulletStats.bounces = bounces;
+
+        bulletStats.splitBullets = splitBullets;
+        bulletStats.splitAngleOffset = splitAngleOffset;
+
+        bulletStats.explosionRadius = explosionRadius;
+        bulletStats.explosionDamage = explosionDamage;
+        bulletStats.explosionDamageMultMaxRange = explosionDamageMultMaxRange;
 
         return bulletStats;
     }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5606717944841421926}
   - component: {fileID: 8425007173112238501}
   - component: {fileID: 2980860581748559632}
+  - component: {fileID: 8502040339865831005}
   m_Layer: 7
   m_Name: Bullet
   m_TagString: Untagged
@@ -210,7 +211,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   timeToLive: 3
+  trailPrefab: {fileID: 9004302418671343164, guid: e96ce00cfc8f1f44eba91acc4817b51b, type: 3}
   timeToEscape: 0.2
   normalBulletSpeed: 15
   physicsBulletSpeed: 15
   physicsBulletGravity: 3
+--- !u!114 &8502040339865831005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5995972970576921285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e186fb3c1cbd7e040a05a64e0ecd54bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spellcasting
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  bullet: {fileID: 5995972970576921285}
+  playerMovement: {fileID: 0}

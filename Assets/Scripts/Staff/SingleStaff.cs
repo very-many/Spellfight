@@ -56,7 +56,7 @@ public class SingleStaff
             castTimer = spell.spellCastTime;
 
             spell.CastSpell(staffMulti, this);
-            cooldownTime = cooldownTime + (spell.spellRecoveryTime / ParentStaffMulti.Recovery * 100);
+            cooldownTime = cooldownTime + GetCooldownWithModifiers(staffMulti, spell);
 
             yield return staffMulti.StartCoroutine(WaitForCast());
 
@@ -66,6 +66,27 @@ public class SingleStaff
         spellCoolDownTimer = cooldownTime;
 
         staffMulti.FinishCast();
+    }
+
+    private float GetCooldownWithModifiers(MultiStaffObject staffMulti, Spell currentSpell)
+    {
+        float baseCooldown = currentSpell.spellRecoveryTime / staffMulti.Recovery * 100;
+
+        int spellIndex = SpellList.IndexOf(currentSpell);
+
+        float amountModifier = 1 - 0.1f * spellIndex;
+
+        float uniqueModifier = 1f;
+
+        for (int i = spellIndex - 1; i > -1; i--)
+        {
+            if (currentSpell.spellTitle != SpellList[i].spellTitle)
+            {
+                uniqueModifier -= 0.1f;
+            } else { break; }
+        }
+
+        return baseCooldown*amountModifier*uniqueModifier;
     }
 
 

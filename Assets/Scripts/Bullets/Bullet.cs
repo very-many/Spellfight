@@ -1,16 +1,21 @@
 using Mirror;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VectorGraphics;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.ParticleSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : NetworkBehaviour
 {
     private SpriteRenderer renderer;
     private Rigidbody2D rb;
+    private Spellcasting spellcasting;
+    private TrailRenderer trailRenderer;
+    private GameObject currentTrail;
     Vector2 direction;
 
     [Header("Bullet Stats")]
@@ -21,9 +26,8 @@ public class Bullet : NetworkBehaviour
     [SerializeField]
     private LayerMask otherBulletsCollision;
     [SerializeField]
-    private float timeToLive = 5;
-    [SerializeField]
-    private float timeToEscape = 0.2f;
+    public GameObject trailPrefab;
+
 
     //these stats are in BulletStats
     private List<BulletType> bulletTypes = new List<BulletType>();
@@ -31,8 +35,14 @@ public class Bullet : NetworkBehaviour
     private float bulletHealth;
     private float bulletSize;
     private float bulletSpeed;
+    private float timeToLive;
+    private float timeToEscape;
     private int bounces;
-
+    private List<BulletStats> splitBullets;
+    private float explosionRadius;
+    private float explosionDamage;
+    private float explosionDamageMultMaxRange;
+    private float trailLength;
     private GameObject _owner;
 
     [Header("Normal Bullets")]
@@ -45,8 +55,6 @@ public class Bullet : NetworkBehaviour
     [SerializeField]
     private float physicsBulletGravity;
 
-
-
     private float _disableTime;
     private float _escapeTime;
 
@@ -55,20 +63,25 @@ public class Bullet : NetworkBehaviour
     {
         Normal, //straight velocity, no gravity
         Physics, //affected by gravity, rotates in direction of velocity
+        Trail, //leaves a trail behind it
         Bounce, //bounces off surfaces a certain amount of times before being destroyed
+        Split, //on collision, spawns multiple smaller bullets that fly in different directions
+        Explosion //on codestruction, spawns an explosion that damages everything in a radius
     }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
+
+        currentTrail = Instantiate(trailPrefab, transform.position, Quaternion.identity);
+        currentTrail.transform.SetParent(transform);
+        trailRenderer = currentTrail.GetComponent<TrailRenderer>();
     }
 
     void OnEnable()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-        _disableTime = Time.time + timeToLive;
-        _escapeTime = Time.time + timeToEscape;
 
         rb.linearVelocity = Vector2.zero;
         rb.angularVelocity = 0f;
@@ -101,7 +114,7 @@ public class Bullet : NetworkBehaviour
 
         if (travelDistance <= 0) return;
 
-        RaycastHit2D hit = Physics2D.CircleCast(transform.position, 0.1f, direction, travelDistance, whatDestroysBullet);
+        RaycastHit2D hit = Physics2D.CircleCast(transform.position, bulletSize*0.5f, direction, travelDistance, whatDestroysBullet);
 
         if (hit.collider != null)
         {
@@ -134,6 +147,7 @@ public class Bullet : NetworkBehaviour
         transform.SetPositionAndRotation(position, rotation * Quaternion.Euler(0, 0, -90));
         gameObject.SetActive(true);
         InitializeBulletType();
+        InitializeBullet();
     }
 
     [ClientRpc]
@@ -146,6 +160,15 @@ public class Bullet : NetworkBehaviour
         transform.SetPositionAndRotation(position, rotation * Quaternion.Euler(0, 0, -90));
         gameObject.SetActive(true);
         InitializeBulletType();
+        InitializeBullet();
+    }
+
+    private void InitializeBullet()
+    {
+        _disableTime = Time.time + timeToLive;
+        _escapeTime = Time.time + timeToEscape;
+
+        spellcasting = _owner.GetComponent<Spellcasting>();
     }
 
     public void Cast(Vector2 direction, Quaternion rotation, Vector2 position, BulletStats stats)
@@ -179,6 +202,13 @@ public class Bullet : NetworkBehaviour
         renderer.material.color = stats.bulletColor;
         this._owner = stats.owner;
         this.bounces = stats.bounces;
+        this.splitBullets = stats.splitBullets;
+        this.explosionRadius = stats.explosionRadius;
+        this.explosionDamage = stats.explosionDamage;
+        this.explosionDamageMultMaxRange = stats.explosionDamageMultMaxRange;
+        this.trailLength = stats.trailLength;
+        this.timeToLive = stats.timeToLive;
+        this.timeToEscape = stats.timeToEscape;
     }
 
     private void InitializeBulletType()
@@ -192,6 +222,14 @@ public class Bullet : NetworkBehaviour
         {
             SetPhysicsVelocity();
             rb.gravityScale = physicsBulletGravity;
+        }
+        trailRenderer.enabled = false;
+        if (bulletTypes.Contains(BulletType.Trail)){
+            trailRenderer.Clear();
+            trailRenderer.enabled = true;
+            trailRenderer.widthMultiplier = bulletSize;
+            trailRenderer.time = trailLength;
+            trailRenderer.material.color = renderer.material.color;
         }
     }
 
@@ -256,6 +294,24 @@ public class Bullet : NetworkBehaviour
 
     private void DestroyBullet()
     {
+        if (bulletTypes.Contains(BulletType.Split)){
+            foreach(BulletStats bullet in splitBullets)
+            {
+                Vector2 castDirection = Quaternion.Euler(0, 0, bullet.splitAngleOffset) * this.transform.right;
+
+                Quaternion castAngle = Quaternion.Euler(0, 0, Mathf.Atan2(castDirection.y, castDirection.x) * Mathf.Rad2Deg);
+
+                spellcasting.CastBullet(castDirection,this.transform.position,castAngle,bullet);
+            }
+        }
+        if (bulletTypes.Contains(BulletType.Explosion))
+        {
+            spellcasting.Explosion(this.transform.position, this.explosionRadius ,this.explosionDamage, this.explosionDamageMultMaxRange);
+        }
+        if (bulletTypes.Contains(BulletType.Trail))
+        {
+            DetachAndSwapTrail();
+        }
         ReturnToPoolServer();
     }
 
@@ -273,5 +329,16 @@ public class Bullet : NetworkBehaviour
         // In host mode, Mirror already invoked the client-side unspawn handler.
         if (!isClient && ObjectPool.instance != null)
             ObjectPool.instance.ReturnServerObject(gameObject);
+    }
+
+    private void DetachAndSwapTrail()
+    {
+        trailRenderer.transform.SetParent(null);
+        trailRenderer.emitting = false;
+        Destroy(trailRenderer.gameObject, trailRenderer.time);
+
+        currentTrail = Instantiate(trailPrefab, transform.position, Quaternion.identity);
+        currentTrail.transform.SetParent(transform);
+        trailRenderer = currentTrail.GetComponent<TrailRenderer>();
     }
 }
