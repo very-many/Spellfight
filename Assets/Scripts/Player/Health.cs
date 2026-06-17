@@ -11,7 +11,6 @@ public class Health : NetworkBehaviour
 
 
     [SerializeField] private HealthBar healthBar;
-    
 
     void OnEnable()
     {
@@ -42,6 +41,8 @@ public class Health : NetworkBehaviour
         TakeHitOnClient();
         if (currentHealth <= 0)
         {
+            Debug.Log(gameObject.GetComponent<PlayerObjectController>());
+            GameOrchestrator.Instance.readyPlayers.Add(gameObject.GetComponent<PlayerObjectController>());
             DieOnClient();
         }
     }
@@ -70,13 +71,5 @@ public class Health : NetworkBehaviour
         // mebby animation or sound effect for health change
         healthBar.SetHealth(newHealth);
         Debug.Log($"Health changed from {oldHealth} to {newHealth}");
-    }
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

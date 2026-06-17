@@ -12,7 +12,7 @@ public class PlayerCosmeticController : NetworkBehaviour
 
     private void Start()
     {
-        PlayerSprite = PlayerObject.GetComponentInChildren<SpriteRenderer>();
+        PlayerSprite = PlayerObject.GetComponentsInChildren<SpriteRenderer>()[1];
     }
 
     public void PlayerCosmeticsSetup()

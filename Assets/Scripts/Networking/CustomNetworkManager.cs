@@ -7,11 +7,17 @@ using Steamworks;
 public class CustomNetworkManager : NetworkManager
 {
     [SerializeField] private PlayerObjectController GamePlayerPrefab;
-    public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
+    //public List<PlayerObjectController> GamePlayers { get; } = new List<PlayerObjectController>();
+    public List<PlayerObjectController> GamePlayers = new List<PlayerObjectController>();
 
     [Header("Pooling")]
     [SerializeField] private ObjectPool bulletPool;
 
+
+    public override void Start()
+    {
+        base.Start();
+    }
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -43,6 +49,6 @@ public class CustomNetworkManager : NetworkManager
 
     public void StartGame(string SceneName)
     {
-        ServerChangeScene(SceneName);
+        GameOrchestrator.Instance.NextGameState();
     }
 }
