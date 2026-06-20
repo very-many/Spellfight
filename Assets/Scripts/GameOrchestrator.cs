@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 
 public class GameOrchestrator : NetworkBehaviour
 {
+    private static readonly int EndHash = Animator.StringToHash("End");
+    private static readonly int StartHash = Animator.StringToHash("Start");
+
     public enum GameState
     {
         Initial,
@@ -20,6 +23,8 @@ public class GameOrchestrator : NetworkBehaviour
 
     public static GameOrchestrator Instance { get; private set; }
 
+    [SerializeField] private TMPro.TextMeshProUGUI timer;
+    [SerializeField] private Animator transitionAnimation;
 
     [Header("State")]
     [SyncVar]
@@ -37,13 +42,15 @@ public class GameOrchestrator : NetworkBehaviour
     [SerializeField] private UnityEngine.Object UpgradeScene;
 
     [Header("Settings")]
-    [SerializeField] private float switchDelay = 3f;
+    [SerializeField] private float sceneSwitchDelay = 3f;
+    [SerializeField] private float transitionDelay = 0.5f;
 
 
     public readonly SyncList<PlayerObjectController> readyPlayers = new();
 
     private CustomNetworkManager manager;
     private bool isSwitchingScene;
+    private bool startTransitionAfterSceneLoad;
 
     private CustomNetworkManager Manager
     {
@@ -92,9 +99,17 @@ public class GameOrchestrator : NetworkBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Scene loading is now handled by the server's RPC calls.
-        // The RPC methods (RpcSpawnPlayersGame/RpcSpawnPlayersUpgrade) will be called
-        // by the server after changing the scene, so we don't need to spawn here.
+        if (!startTransitionAfterSceneLoad)
+        {
+            return;
+        }
+
+        startTransitionAfterSceneLoad = false;
+
+        if (transitionAnimation != null)
+        {
+            transitionAnimation.SetTrigger(StartHash);
+        }
     }
 
     public void NextGameState()
@@ -190,7 +205,34 @@ public class GameOrchestrator : NetworkBehaviour
     {
         isSwitchingScene = true;
 
-        yield return new WaitForSeconds(switchDelay);
+        float elapsedTime = 0f;
+        bool transitionStarted = false;
+        float transitionStartTime = Mathf.Max(0f, sceneSwitchDelay - transitionDelay);
+
+        while (elapsedTime < sceneSwitchDelay)
+        {
+            if (nextState == GameState.Game && timer != null)
+            {
+                timer.text = Mathf.CeilToInt(sceneSwitchDelay - elapsedTime).ToString();
+            }
+
+            if (!transitionStarted && elapsedTime >= transitionStartTime)
+            {
+                transitionStarted = true;
+                if (transitionAnimation != null)
+                {
+                    transitionAnimation.SetTrigger(EndHash);
+                }
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (nextState == GameState.Game && timer != null)
+        {
+            timer.text = "0";
+        }
 
         currentGameState = nextState;
         readyPlayers.Clear();
@@ -204,6 +246,10 @@ public class GameOrchestrator : NetworkBehaviour
         {
             Manager.ServerChangeScene(sceneName);
         }
+
+        startTransitionAfterSceneLoad = true;
+
+        timer.text = "";
 
         isSwitchingScene = false;
     }

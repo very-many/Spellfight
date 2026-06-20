@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using TMPro;
 
 public class PlayerObjectController : NetworkBehaviour
 {
@@ -18,6 +19,7 @@ public class PlayerObjectController : NetworkBehaviour
 
     //Cosmetics
     [SyncVar(hook = nameof(SendPlayerCosmetic))] public int PlayerCosmetic;
+    [SerializeField] private TextMeshProUGUI PlayerNameText;
     private CustomNetworkManager manager;
 
     private CustomNetworkManager Manager
@@ -141,6 +143,10 @@ public class PlayerObjectController : NetworkBehaviour
         }
         if (isClient)
         {
+            if (PlayerNameText != null)
+            {
+                PlayerNameText.text = NewValue;
+            }
             LobbyController.Instance.UpdatePlayerList();
         }
     }
