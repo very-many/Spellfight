@@ -39,6 +39,7 @@ public class PlayerMovementController : NetworkBehaviour
     [Space]
     [Header("Input")]
     public Vector2 movement;
+    public Vector2 knockback = new Vector2(0, 0);
 
     private bool requestedTeleport = false;
 
@@ -76,6 +77,11 @@ public class PlayerMovementController : NetworkBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        knockback = knockback * 0.8f;
+    }
+
     [Command]
     private void CmdClientChosenTeleport(Vector2 pos)
     {
@@ -95,7 +101,12 @@ public class PlayerMovementController : NetworkBehaviour
     }
 
     private void Tick()
-    {
+    { 
+        if (knockback.magnitude < 1)
+        {
+            knockback = new Vector2(0,0);
+        }
+
         float x = movement.x;
         Vector2 dir = new Vector2(x, movement.y);
 
@@ -179,11 +190,11 @@ public class PlayerMovementController : NetworkBehaviour
 
         if (!wallJumped)
         {
-            rb.linearVelocity = new Vector2(dir.x * speed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(dir.x * speed + knockback.x, rb.linearVelocity.y);
         }
         else
         {
-            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, (new Vector2(dir.x * speed, rb.linearVelocity.y)), wallJumpLerp * Time.deltaTime);
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, (new Vector2(dir.x * speed + knockback.x, rb.linearVelocity.y)), wallJumpLerp * Time.deltaTime);
         }
     }
 
@@ -207,5 +218,12 @@ public class PlayerMovementController : NetworkBehaviour
         floatyTimeInSec = 1;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);
         rb.linearVelocity += dir * 12;
+    }
+
+    public void Knockback(Vector2 dir)
+    {
+        rb.AddForce(dir);
+        knockback = dir;
+        Debug.Log("Knockback: " + dir);
     }
 }

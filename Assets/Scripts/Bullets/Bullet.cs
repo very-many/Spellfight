@@ -1,4 +1,5 @@
 using Mirror;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VectorGraphics;
@@ -44,16 +45,27 @@ public class Bullet : NetworkBehaviour
 
     private float _disableTime;
     private float _escapeTime;
+    private float _bounceEscapeTime;
 
+    private float currentSizeMod;
+    private float currentSpeedMod;
+    private float currentDamageMod;
+
+    private float currentDamage; //to be implemented
 
     public enum BulletType
     {
         Normal, //straight velocity, no gravity
         Physics, //affected by gravity, rotates in direction of velocity
         Trail, //leaves a trail behind it
-        Bounce, //bounces off surfaces a certain amount of times before being destroyed
+        BounceOnWall, //bounces off surfaces a certain amount of times before being destroyed
+        IncreaseSizeOnBounce, //when combined with Bounce, increases size of bullet on each bounce
         Split, //on collision, spawns multiple smaller bullets that fly in different directions
-        Explosion //on codestruction, spawns an explosion that damages everything in a radius
+        Explosion, //on codestruction, spawns an explosion that damages everything in a radius
+        DamageScaleWithSize,
+        DamageScaleWithSpeed,
+        KnockBackFromBullet,
+        KnockBackFromPlayer,
     }
 
     private void Awake()
@@ -74,15 +86,25 @@ public class Bullet : NetworkBehaviour
         rb.angularVelocity = 0f;
     }
 
-    private void Update()
-    {
-        if (Time.time > _disableTime)
-            DestroyBullet();
-        this.transform.localScale = Vector3.one * stats.bulletSize;
-    }
 
     private void FixedUpdate()
     {
+        if (Time.time > _disableTime)
+            DestroyBullet();
+
+        currentSpeedMod = (float)(Math.Pow(rb.linearVelocity.magnitude / stats.bulletSpeed / normalBulletSpeed, 1.3));
+
+        //set Damage
+        currentDamage = stats.bulletDamage * currentDamageMod 
+            * (stats.bulletTypes.Contains(BulletType.DamageScaleWithSize) ? currentSizeMod : 1f)
+            * (stats.bulletTypes.Contains(BulletType.DamageScaleWithSpeed) ? currentSpeedMod : 1f);
+
+
+        if (Time.time > _bounceEscapeTime)
+        {
+            this.transform.localScale = Vector3.one * stats.bulletSize * currentSizeMod;
+        }
+
         if (stats.bulletTypes.Contains(BulletType.Physics))
         {
             //rotate bullet in direction of velocity;
@@ -97,28 +119,110 @@ public class Bullet : NetworkBehaviour
 
         if (travelDistance <= 0) return;
 
-        RaycastHit2D hit = Physics2D.CircleCast(transform.position, stats.bulletSize *0.5f, direction, travelDistance, whatDestroysBullet);
+        RaycastHit2D hit;
+       
 
+        hit = Physics2D.CircleCast(transform.position, this.transform.localScale.magnitude * 0.4f, direction, travelDistance, otherBulletsCollision);
         if (hit.collider != null)
         {
-            if (stats.bulletTypes.Contains(BulletType.Bounce) && stats.bounces > 0)
+            Collider2D collision = hit.collider;
+
+            RaycastHit2D terrainCheck = Physics2D.Linecast(transform.position, hit.centroid, whatDestroysBullet);
+            if (terrainCheck.collider == null)
+            {
+                BulletCollision(collision);
+            }
+        }
+
+
+        hit = Physics2D.CircleCast(transform.position, this.transform.localScale.magnitude * 0.4f, direction, travelDistance, bulletPlayerCollision);
+        if (hit.collider != null)
+        {
+            Collider2D collision = hit.collider;
+
+            RaycastHit2D terrainCheck = Physics2D.Linecast(transform.position, hit.centroid, whatDestroysBullet);
+            if (terrainCheck.collider == null)
+            {
+                PlayerCollision(collision);
+            }
+        }
+
+
+        hit = Physics2D.CircleCast(transform.position, this.transform.localScale.magnitude * 0.4f, direction, travelDistance, whatDestroysBullet);
+        if (hit.collider != null)
+        {
+            if (stats.bulletTypes.Contains(BulletType.BounceOnWall) && stats.bounces > 0)
             {
                 stats.bounces--;
-                transform.position = hit.centroid;
 
                 Vector2 newDirection = Vector2.Reflect(direction, hit.normal);
                 transform.right = newDirection;
                 float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0, 0, angle -90);
-                rb.linearVelocity = newDirection * velocity.magnitude;
+                rb.linearVelocity = newDirection * velocity.magnitude * stats.bounciness;
+
+                if (stats.bulletTypes.Contains(BulletType.IncreaseSizeOnBounce))
+                {
+                    currentSizeMod += velocity.magnitude * stats.growthMod;
+                    _bounceEscapeTime = Time.time + 0.05f;
+                }
             }
             else
             {
-                transform.position = hit.centroid;
                 DestroyBullet();
                 Debug.Log("hit Wall");
             }
         }
+    }
+
+    private void BulletCollision(Collider2D collision)
+    {
+        if (!isServer) return;
+        Bullet bullet = collision.GetComponent<Bullet>();
+        if (!(stats.owner = bullet.stats.owner))
+        {
+            if (bullet != null)
+            {
+                bullet.stats.bulletHealth -= currentDamage;
+                this.stats.bulletHealth -= bullet.currentDamage;
+                if (bullet.stats.bulletHealth <= 0)
+                {
+                    bullet.DestroyBullet();
+                }
+                if (this.stats.bulletHealth <= 0)
+                {
+                    DestroyBullet();
+                }
+            }
+        }
+    }
+
+    private void PlayerCollision(Collider2D collision)
+    {
+        if (!isServer) return;
+        if (collision.gameObject == stats.owner && _escapeTime > Time.time) { return; } //attempt to fix problem where the bullet hits the player immediately whem shooting
+
+        Health health = collision.GetComponent<Health>();
+        if (health != null)
+        {
+            health.TakeDamage((int)currentDamage);
+            if (stats.bulletTypes.Contains(BulletType.KnockBackFromBullet))
+            {
+                Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
+                KnockbackServer(knockbackDirection, health);
+                KnockbackRpc(knockbackDirection, health);
+            }
+
+            if (stats.bulletTypes.Contains(BulletType.KnockBackFromPlayer))
+            {
+                Vector2 knockbackDirection = (transform.position - stats.owner.transform.position).normalized;
+                KnockbackServer(knockbackDirection, health);
+                KnockbackRpc(knockbackDirection, health);
+            }
+        }
+        //Screen shake
+        DestroyBullet();
+        Debug.Log("hit Player");
     }
 
     [Server]
@@ -126,7 +230,10 @@ public class Bullet : NetworkBehaviour
     {
         this.stats = stats;
         renderer.material.color = stats.bulletColor;
+        renderer.sprite = SpriteLibrary.instance.GetSprite(stats.sprite);
+        this.transform.localScale = Vector3.one * stats.bulletSize;
         this.direction = direction;
+
         transform.SetPositionAndRotation(position, rotation * Quaternion.Euler(0, 0, -90));
         gameObject.SetActive(true);
         InitializeBulletType();
@@ -138,20 +245,27 @@ public class Bullet : NetworkBehaviour
     {
         // In host mode, the server already initialized the bullet.
         if (isServer) return;
-
         this.stats = stats;
         renderer.material.color = stats.bulletColor;
+        renderer.sprite = SpriteLibrary.instance.GetSprite(stats.sprite);
+        this.transform.localScale = Vector3.one  * stats.bulletSize;
         this.direction = direction;
+
         transform.SetPositionAndRotation(position, rotation * Quaternion.Euler(0, 0, -90));
         gameObject.SetActive(true);
         InitializeBulletType();
         InitializeBullet();
     }
 
+
     private void InitializeBullet()
     {
         _disableTime = Time.time + stats.timeToLive;
         _escapeTime = Time.time + stats.timeToEscape;
+
+        currentSizeMod = 1f;
+        currentSpeedMod = 1f;
+        currentDamageMod = 1f;
 
         spellcasting = stats.owner.GetComponent<Spellcasting>();
     }
@@ -202,45 +316,34 @@ public class Bullet : NetworkBehaviour
 
         if ((otherBulletsCollision.value & (1 << collision.gameObject.layer)) > 0)
         {
-
-            //spawn Paritcles
-            //Soundeffect
-
-            Bullet bullet = collision.GetComponent<Bullet>();
-
-            if (!(stats.owner = bullet.stats.owner)) {
-                if (bullet != null)
-                {
-                    bullet.stats.bulletHealth -= stats.bulletDamage;
-                    this.stats.bulletHealth -= bullet.stats.bulletDamage;
-                    if (bullet.stats.bulletHealth <= 0)
-                    {
-                        bullet.DestroyBullet();
-                    }
-                    if (this.stats.bulletHealth <= 0)
-                    {
-                        DestroyBullet();
-                    }
-                }
-            }
+            BulletCollision(collision);
         }
 
         if ((bulletPlayerCollision.value & (1 << collision.gameObject.layer)) > 0)
         {
-            //spawn Paritcles
-            //Soundeffect
-
-            if (collision.gameObject == stats.owner && _escapeTime > Time.time) { return; } //attempt to fix problem where the bullet hits the player immediately whem shooting
-
-            Health health = collision.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage((int)stats.bulletDamage);
-            }
-            //Screen shake
-            DestroyBullet();
-            Debug.Log("hit Player");
+            PlayerCollision(collision);
         }
+    }
+    
+
+    [Server]
+    private void KnockbackServer(Vector2 knockbackDirection, Health health)
+    {
+        Knockback(knockbackDirection, health);
+    }
+
+    [ClientRpc]
+    private void KnockbackRpc(Vector2 knockbackDirection, Health health)
+    {
+        Knockback(knockbackDirection, health);
+    }
+
+    private void Knockback(Vector2 knockbackDirection, Health health)
+    {
+        PlayerMovementController playerMovement = health.GetComponent<PlayerMovementController>();
+        knockbackDirection = knockbackDirection * (float)(stats.knockbackForce * Math.Pow(currentSizeMod, 1.3));
+        knockbackDirection = new Vector2(knockbackDirection.x * 2, (knockbackDirection.y * 0.5f));
+        playerMovement.Knockback(knockbackDirection);
     }
 
     private void DestroyBullet()
