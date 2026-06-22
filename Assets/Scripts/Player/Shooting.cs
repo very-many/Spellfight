@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
+using SmallHedge.SoundManager;
 
 public class Shooting : NetworkBehaviour
 {
@@ -63,6 +64,7 @@ public class Shooting : NetworkBehaviour
             CmdFire(direction, gunRotation, bulletTransform.position);
             canFire = false;
             timer = 0;
+            SoundManager.PlaySound(SoundType.Attack);
         }
         else if (!canFire)
         {

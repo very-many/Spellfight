@@ -4,6 +4,7 @@ namespace SmallHedge.SoundManager
     {
         Footstep,
         Jump,
+        PowerJump,
         Land,
         Slide,
         Attack,
