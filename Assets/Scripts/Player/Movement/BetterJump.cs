@@ -1,0 +1,46 @@
+using Mirror;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+[RequireComponent(typeof(Rigidbody2D))]
+public class BetterJumping : NetworkBehaviour
+{
+    private Rigidbody2D rb;
+    private PlayerMovementController playerMovement;
+
+    [Header("Input Action - Jump")]
+    [SerializeField]
+    private InputActionReference JumpAction;
+
+    [Space]
+    [Header("Stats")]
+    public float FallMultiplier = 2.5f;
+    public float JumpMultiplier = 2f;
+    public float JumpSpellMultiplier = 1.7f;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        playerMovement = GetComponent<PlayerMovementController>();
+    }
+
+    void Update()
+    {
+        if (!isOwned)
+            return;
+        if (playerMovement.floatyTimeInSec > 0)
+        {
+            rb.linearVelocity += (JumpSpellMultiplier - 1) * Physics2D.gravity.y * Time.deltaTime * Vector2.up;
+        }
+        else if (rb.linearVelocity.y < 0 && !playerMovement.spellJumped)
+        {
+            rb.linearVelocity += (FallMultiplier - 1) * Physics2D.gravity.y * Time.deltaTime * Vector2.up;
+        }
+        else if (rb.linearVelocity.y > 0 && !JumpAction.action.IsPressed())
+        {
+            rb.linearVelocity += (JumpMultiplier - 1) * Physics2D.gravity.y * Time.deltaTime * Vector2.up;
+        }
+    }
+}
