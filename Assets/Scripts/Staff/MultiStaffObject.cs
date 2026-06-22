@@ -37,6 +37,10 @@ public class MultiStaffObject : NetworkBehaviour {
 
     public void Awake()
     {
+        player = gameObject;
+        directionalInfo = GetComponentInChildren<DirectStaff>();
+        spellcasting = GetComponent<Spellcasting>();
+
         Staff_1 = new SingleStaff(this, new List<Spell> { new Firebolt() });
         Staff_2 = new SingleStaff(this, null);
         Staff_3 = new SingleStaff(this, new List<Spell> { new Jump() });
@@ -44,13 +48,12 @@ public class MultiStaffObject : NetworkBehaviour {
 
     public void Start()
     {
-        player = gameObject;
-        directionalInfo = GetComponentInChildren<DirectStaff>();
-        directionalInfo.SetPlayer(player);
+        if (directionalInfo != null)
+        {
+            directionalInfo.SetPlayer(player);
+        }
 
         if (!isOwned) return;
-
-        spellcasting = GetComponent<Spellcasting>();
     }
 
     public void UpdateSpells(List<Spell> staff1Spells, List<Spell> staff2Spells, List<Spell> staff3Spells)

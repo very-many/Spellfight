@@ -40,15 +40,6 @@ public class GameOrchestrator : NetworkBehaviour
     public PlayerObjectController LastWinner => lastWinner;
     public int CurrentCountdown => currentCountdown;
 
-    private void OnCountdownChanged(int oldValue, int newValue)
-    {
-        if (timer != null)
-        {
-            timer.text = newValue > 0 ? newValue.ToString() : "";
-        }
-    }
-
-
     [Header("Scenes")]
     [SerializeField] private List<UnityEngine.Object> GameScenes;
     [SerializeField] private UnityEngine.Object UpgradeScene;
@@ -121,6 +112,14 @@ public class GameOrchestrator : NetworkBehaviour
         if (transitionAnimation != null)
         {
             transitionAnimation.SetTrigger(StartHash);
+        }
+    }
+
+    private void OnCountdownChanged(int oldValue, int newValue)
+    {
+        if (timer != null)
+        {
+            timer.text = newValue > 0 ? newValue.ToString() : "";
         }
     }
 

@@ -13,18 +13,27 @@ public class PlayerMenuCaller : NetworkBehaviour
 
     public PlayerMainCoordinator coordinator;
 
+    public bool canOpenMenu = true;
+
     private void Start()
     {
         if (!isOwned) return;
         coordinator = GetComponent<PlayerMainCoordinator>();
 
         this.playerUI = GetComponent<PlayerUI>();
-        //playerUI.StartUI();
+
+        //if not steam game
+        Debug.Log("Game Orchestrator Instance: " + GameOrchestrator.Instance);
+        if (GameOrchestrator.Instance == null)
+            playerUI.StartUI();
     }
 
     public void OnChooseUpgrade(InputAction.CallbackContext context)
     {
+        if (!canOpenMenu) return;
+
         if (!context.performed || !isOwned) return;
+
         if (upgradeUI == null)
         {
             if (!WireExternalUi())
@@ -61,7 +70,11 @@ public class PlayerMenuCaller : NetworkBehaviour
             }
         }
         staffManager.CloseUI();
-        //playerUI.StartUI();
+
+        //if not steam game
+        if (GameOrchestrator.Instance == null)
+            playerUI.StartUI();
+
     }
 
     public void CloseHud()

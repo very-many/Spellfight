@@ -789,6 +789,7 @@ MonoBehaviour:
   Ready: 0
   UpgradeReady: 0
   PlayerCosmetic: 0
+  PlayerNameText: {fileID: 0}
 --- !u!70 &4546213652136251131
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

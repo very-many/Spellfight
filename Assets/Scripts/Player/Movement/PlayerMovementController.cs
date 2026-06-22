@@ -57,7 +57,11 @@ public class PlayerMovementController : NetworkBehaviour
         if (!SceneManager.GetActiveScene().name.Contains("Game"))
             return;
 
-        //PlayerVisuals.SetActive(true);
+        if(GameOrchestrator.Instance == null)
+        {
+            PlayerVisuals.SetActive(true);
+        }
+
 
         if (isOwned && RequestTeleport)
         {

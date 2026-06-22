@@ -14,6 +14,12 @@ public class Firebolt : Spell
 
     public void CastSpell(MultiStaffObject multiStaff, SingleStaff singleStaff)
     {
+        if (multiStaff == null || multiStaff.directionalInfo == null || multiStaff.spellcasting == null)
+        {
+            Debug.LogError("Firebolt: Missing required components (multiStaff " + multiStaff + ", directionalInfo " + multiStaff.directionalInfo + ", or spellcasting " + multiStaff.spellcasting + ")");
+            return;
+        }
+
         List<BulletType> bulletTypes = new List<BulletType> { Bullet.BulletType.Normal, BulletType.Trail };
         float bulletDamage = 1f * multiStaff.bulletDamageMult * multiStaff.MagicPower;
         float bulletHealth = 0.5f * multiStaff.bulletHealthMult * multiStaff.MagicPower;
