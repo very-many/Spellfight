@@ -165,7 +165,7 @@ public class Bullet : NetworkBehaviour
                 if (stats.bulletTypes.Contains(BulletType.IncreaseSizeOnBounce))
                 {
                     currentSizeMod += velocity.magnitude * stats.growthMod;
-                    currentHealth += velocity.magnitude * stats.growthMod;
+                    currentHealth *= (1 + (velocity.magnitude * stats.growthMod));
                     _bounceEscapeTime = Time.time + 0.05f;
                 }
             }
@@ -189,8 +189,8 @@ public class Bullet : NetworkBehaviour
                 bullet.currentHealth -= currentDamage;
                 this.currentHealth -= bullet.currentDamage;
 
-                Debug.Log("Other Bullet: " + bullet.stats.bulletHealth);
-                Debug.Log("This Bullet: " + stats.bulletHealth);
+                Debug.Log("Other Bullet: " + bullet.currentHealth);
+                Debug.Log("This Bullet: " + currentHealth);
 
                 if (bullet.currentHealth <= 0)
                 {
