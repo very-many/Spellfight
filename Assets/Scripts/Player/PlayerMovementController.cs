@@ -42,8 +42,19 @@ public class PlayerMovementController : NetworkBehaviour
     MultiStaffObject staffMulti;
     DirectStaff directStaff;
 
-    private bool requestedTeleport = false;
+    [Space]
+    [Header("Animation Parameters")]
+    public Animator animator;
+    private readonly int speedXHash = Animator.StringToHash("speedX");
+    private readonly int speedYHash = Animator.StringToHash("speedY");
+    private readonly int isJumpingHash = Animator.StringToHash("isJumping");
+    private readonly int isFallingHash = Animator.StringToHash("isFalling");
+    private readonly int isWallHoldHash = Animator.StringToHash("isWallHold");
+    private readonly int isFacingLeftHash = Animator.StringToHash("isFacingLeft");
+    private bool prevFacingLeft = false;
 
+    private bool requestedTeleport = false;
+    private bool wasGrounded = false;
 
     void Start()
     {
@@ -109,6 +120,12 @@ public class PlayerMovementController : NetworkBehaviour
         if (coll.onGround)
         {
             wallJumped = false;
+
+            // Detect landing
+            if (!wasGrounded)
+            {
+                wasGrounded = true;
+            }
         }
 
         if (coll.onWall && !coll.onGround && x != 0)
@@ -125,6 +142,35 @@ public class PlayerMovementController : NetworkBehaviour
             side = 1;
         else if (x < 0)
             side = -1;
+
+        UpdateAnimationParameters();
+    }
+
+    private void UpdateAnimationParameters()
+    {
+        if (animator == null)
+            return;
+
+        float absXvelocity = Mathf.Abs(rb.linearVelocity.x);
+        animator.SetFloat(speedXHash, absXvelocity);
+        animator.SetFloat(speedYHash, rb.linearVelocity.y);
+
+        bool facingLeft = rb.linearVelocity.x < -0.01f;
+        // only update if the abs velocity is large enough, to prevent feault right
+        if (facingLeft != prevFacingLeft && absXvelocity > 0.01f)
+        {
+            animator.SetBool(isFacingLeftHash, facingLeft);
+            prevFacingLeft = facingLeft;
+        }
+
+        bool isJumping = rb.linearVelocity.y > 0;
+        animator.SetBool(isJumpingHash, isJumping);
+
+        bool isFalling = rb.linearVelocity.y < 0 && !coll.onGround;
+        animator.SetBool(isFallingHash, isFalling);
+
+        bool isWallHold = coll.onWall && !coll.onGround;
+        animator.SetBool(isWallHoldHash, isWallHold);
     }
 
     public void OnMove(InputAction.CallbackContext context)
