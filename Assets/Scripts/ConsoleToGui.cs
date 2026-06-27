@@ -16,6 +16,7 @@ public class ConsoleToGUI : MonoBehaviour
 
     string myLog = "*begin log";
     string filename = "";
+    public bool saveLogs = false;
     bool doShow = false;
     int kChars = 700;
 
@@ -41,16 +42,19 @@ public class ConsoleToGUI : MonoBehaviour
         {
             myLog = myLog.Substring(myLog.Length - kChars);
         }
-        if (filename == "")
+        if (saveLogs)
         {
-            string d = System.Environment.GetFolderPath(
-               System.Environment.SpecialFolder.Desktop) + "/YOUR_LOGS";
-            System.IO.Directory.CreateDirectory(d);
-            string r = Random.Range(1000, 9999).ToString();
-            filename = d + "/log-" + r + ".txt";
+            if (filename == "")
+            {
+                string d = System.Environment.GetFolderPath(
+                   System.Environment.SpecialFolder.Desktop) + "/SpellFight_Logs";
+                System.IO.Directory.CreateDirectory(d);
+                string r = Random.Range(1000, 9999).ToString();
+                filename = d + "/log-" + r + ".txt";
+            }
+            try { System.IO.File.AppendAllText(filename, logString + "\r\n"); }
+            catch { }
         }
-        try { System.IO.File.AppendAllText(filename, logString + "\r\n"); }
-        catch { }
     }
 
     void OnGUI()
