@@ -205,6 +205,10 @@ PrefabInstance:
       propertyPath: PlayerNameText
       value: 
       objectReference: {fileID: 1804556111663171496}
+    - target: {fileID: 4633958341542816235, guid: 9c95d769f33612e419014e913c4efab1, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6306525671964390372, guid: 9c95d769f33612e419014e913c4efab1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -14.1
@@ -233,7 +237,8 @@ PrefabInstance:
       propertyPath: PlayerObject
       value: 
       objectReference: {fileID: 5300318948805037248}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4633958341542816235, guid: 9c95d769f33612e419014e913c4efab1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7483263176067244286, guid: 9c95d769f33612e419014e913c4efab1, type: 3}

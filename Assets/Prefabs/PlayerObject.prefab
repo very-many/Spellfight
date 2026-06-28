@@ -767,6 +767,7 @@ GameObject:
   - component: {fileID: 3327559430433585903}
   - component: {fileID: 8140610524751975026}
   - component: {fileID: 3890450645484997893}
+  - component: {fileID: -5831350844480441426}
   m_Layer: 3
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -1015,7 +1016,6 @@ MonoBehaviour:
   side: 1
   floatyTimeInSec: 0
   movement: {x: 0, y: 0}
-  playerInput: {fileID: 0}
   animator: {fileID: 0}
   knockback: {x: 0, y: 0}
 --- !u!114 &6517591035741378657
@@ -1172,3 +1172,19 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   healthBar: {fileID: 9160002307464732421}
+  spawnGraceSeconds: 2
+--- !u!114 &-5831350844480441426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7407786158499650943}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fbc41f776f9aa43a903258d951f223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOutsideCamera
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0

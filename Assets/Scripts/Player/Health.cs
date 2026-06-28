@@ -72,6 +72,14 @@ public class Health : NetworkBehaviour
         }
     }
 
+    public void Kill()
+    {
+        if (!isServer)
+            return;
+
+        TakeDamage(maxHealth);
+    }
+
     [ClientRpc]
     private void TakeHitOnClient()
     {

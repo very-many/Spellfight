@@ -286,7 +286,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 5595778732d47c44aa0d61c3b43598f0, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -588,7 +588,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1212207724575282330, guid: fb1ed2226a07cdf41996826915fab27c, type: 3}
+  m_Sprite: {fileID: 6132397117031619742, guid: 5f4ec8f379d7a3d48a86bb052d0e6a28, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -606,37 +606,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046070887}
   m_CullTransparentMesh: 1
---- !u!1 &1122971302
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1122971303}
-  m_Layer: 0
-  m_Name: Scale
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1122971303
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1122971302}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.44787, y: -0.18581, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1274990539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2757935405219083423, guid: d341f4f7ce4c4204998252b45bef758e, type: 3}
       propertyPath: GameScenes.Array.size
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2757935405219083423, guid: d341f4f7ce4c4204998252b45bef758e, type: 3}
       propertyPath: 'GameScenes.Array.data[1]'
@@ -1305,6 +1274,14 @@ PrefabInstance:
       propertyPath: 'GameScenes.Array.data[3]'
       value: 
       objectReference: {fileID: 102900000, guid: 61dc357cf19252c45a0eaaa88fd9df3f, type: 3}
+    - target: {fileID: 2757935405219083423, guid: d341f4f7ce4c4204998252b45bef758e, type: 3}
+      propertyPath: 'GameScenes.Array.data[4]'
+      value: 
+      objectReference: {fileID: 102900000, guid: 3ede11ee2ab59a74aa11bc8c6809ff6a, type: 3}
+    - target: {fileID: 2757935405219083423, guid: d341f4f7ce4c4204998252b45bef758e, type: 3}
+      propertyPath: 'GameScenes.Array.data[5]'
+      value: 
+      objectReference: {fileID: 102900000, guid: 1a5faaa41af55a74883a690ecbb06d0c, type: 3}
     - target: {fileID: 4335131577718741092, guid: d341f4f7ce4c4204998252b45bef758e, type: 3}
       propertyPath: m_Name
       value: Network Manager
@@ -1364,4 +1341,3 @@ SceneRoots:
   - {fileID: 5557439468724638692}
   - {fileID: 1870530036}
   - {fileID: 606166835}
-  - {fileID: 1122971303}

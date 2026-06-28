@@ -48,10 +48,10 @@ public class PlayerCollisionController : MonoBehaviour
         wallSide = onRightWall ? -1 : 1;
 
         // Landing: transition from not-on-ground -> on-ground
-        if (!wasOnGround && onGround)
+        /*if (!wasOnGround && onGround)
         {
             SoundManager.PlaySound(SoundType.Land);
-        }
+        }*/
 
         // Jumping: transition from on-ground -> not-on-ground
         // Only play if the player is moving upward (to avoid playing when walking off edges).

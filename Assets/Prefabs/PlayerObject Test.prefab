@@ -774,6 +774,7 @@ GameObject:
   - component: {fileID: 3227256166308750262}
   - component: {fileID: 4963407450501170020}
   - component: {fileID: 733014467782720038}
+  - component: {fileID: 4633958341542816235}
   m_Layer: 3
   m_Name: PlayerObject Test
   m_TagString: Untagged
@@ -1014,6 +1015,7 @@ MonoBehaviour:
   jumpForce: 12
   slideSpeed: 1
   wallJumpLerp: 5
+  cyoteTime: 0.05
   canMove: 1
   wallJumped: 0
   wallSlide: 0
@@ -1021,7 +1023,6 @@ MonoBehaviour:
   side: 1
   floatyTimeInSec: 0
   movement: {x: 0, y: 0}
-  playerInput: {fileID: 6517591035741378657}
   animator: {fileID: 3735691441776991881}
   knockback: {x: 0, y: 0}
 --- !u!114 &6517591035741378657
@@ -1325,8 +1326,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c954629c4cf7e46a3d28b909b54d0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUI
-  styleSheet: {fileID: 7433441132597879392, guid: 30fd93adff01b2247955c9fca8fb74ff, type: 3}
   staffMulti: {fileID: 0}
+  styleSheet: {fileID: 7433441132597879392, guid: 30fd93adff01b2247955c9fca8fb74ff, type: 3}
+--- !u!114 &4633958341542816235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7407786158499650943}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26fbc41f776f9aa43a903258d951f223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KillOutsideCamera
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
 --- !u!1 &8997272477913709170
 GameObject:
   m_ObjectHideFlags: 0
