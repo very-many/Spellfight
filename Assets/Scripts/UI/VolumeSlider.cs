@@ -6,19 +6,22 @@ using SmallHedge.SoundManager;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 
-public class VolumeSlider : MonoBehaviour, IPointerUpHandler
+public class VolumeSlider : MonoBehaviour
 {
     [SerializeField] AudioMixer audioMixer;
     [SerializeField] Slider effectSlider;
     [SerializeField] Slider musicSlider;
 
+    private const string prefKeyEffectVolume = "EffectVolume";
+    private const string prefKeyMusicVolume = "MusicVolume";
+
     void Start()
     {
-        if (!PlayerPrefs.HasKey("EffectVolume"))
-            PlayerPrefs.SetFloat("EffectVolume", 1f);
+        if (!PlayerPrefs.HasKey(prefKeyEffectVolume))
+            PlayerPrefs.SetFloat(prefKeyEffectVolume, 1f);
 
-        if (!PlayerPrefs.HasKey("MusicVolume"))
-            PlayerPrefs.SetFloat("MusicVolume", 1f);
+        if (!PlayerPrefs.HasKey(prefKeyMusicVolume))
+            PlayerPrefs.SetFloat(prefKeyMusicVolume, 1f);
 
         LoadVolumeSliders();
         SetEffectVolume(effectSlider.value);
@@ -28,33 +31,27 @@ public class VolumeSlider : MonoBehaviour, IPointerUpHandler
     public void SetEffectVolume(float volume)
     {
         volume = Mathf.Clamp(volume, 0.0001f, 1f);
-        audioMixer.SetFloat("EffectVolume", Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat(prefKeyEffectVolume, Mathf.Log10(volume) * 20);
     }
 
     public void SetMusicVolume(float volume)
     {
         volume = Mathf.Clamp(volume, 0.0001f, 1f);
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume) * 20);
+        audioMixer.SetFloat(prefKeyMusicVolume, Mathf.Log10(volume) * 20);
     }
 
     private void LoadVolumeSliders()
     {
-        effectSlider.value = PlayerPrefs.GetFloat("EffectVolume", 1f);
-        musicSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        effectSlider.value = PlayerPrefs.GetFloat(prefKeyEffectVolume, 1f);
+        musicSlider.value = PlayerPrefs.GetFloat(prefKeyMusicVolume, 1f);
     }
 
-    private void SaveEffectVolumeSlider()
+    public void SaveEffectVolumeSlider()
     {
-        PlayerPrefs.SetFloat("EffectVolume", effectSlider.value);
+        PlayerPrefs.SetFloat(prefKeyEffectVolume, effectSlider.value);
     }
-    private void SaveMusicVolumeSlider()
+    public void SaveMusicVolumeSlider()
     {
-        PlayerPrefs.SetFloat("MusicVolume", musicSlider.value);
-    }
-
-    public void OnPointerUp(PointerEventData eventData) //save the volume settings when the user releases the slider
-    {
-        SaveEffectVolumeSlider();
-        SaveMusicVolumeSlider();
+        PlayerPrefs.SetFloat(prefKeyMusicVolume, musicSlider.value);
     }
 }
