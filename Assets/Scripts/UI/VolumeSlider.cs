@@ -9,12 +9,12 @@ public class VolumeSlider : MonoBehaviour
 
     void Start()
     {
-        if(!PlayerPrefs.HasKey("EffectVolume")
+        if(!PlayerPrefs.HasKey("EffectVolume"))
         {
             PlayerPrefs.SetFloat("EffectVolume", 1f);
         }
 
-        if(!PlayerPrefs.HasKey("MusicVolume")
+        if(!PlayerPrefs.HasKey("MusicVolume"))
         {
             PlayerPrefs.SetFloat("MusicVolume", 1f);
         }
