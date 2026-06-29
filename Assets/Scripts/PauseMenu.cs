@@ -56,6 +56,8 @@ public class PauseMenu : MonoBehaviour
             return;
         }
 
+        if (GameOrchestrator.Instance == null) return;
+
         if (menuStack.Count == 0)
         {
             EnablePauseMenu();
@@ -170,6 +172,11 @@ public class PauseMenu : MonoBehaviour
     public void OnOptions()
     {
         EnableSublevelMenu(1);
+    }
+
+    public void OnBack()
+    {
+        CloseCurrentMenu();
     }
 
 }
