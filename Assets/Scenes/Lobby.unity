@@ -2191,7 +2191,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 996908469}
   m_HandleRect: {fileID: 996908468}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2488,7 +2488,7 @@ AudioSource:
   m_GameObject: {fileID: 1921209527}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2698512797418153685, guid: b449596e3fe05fa46a4fe3828628fb45, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 9d7b093b2a7810c4999bee9ff741b374, type: 3}
   m_PlayOnAwake: 1

@@ -22,6 +22,7 @@ public class Firebolt : Spell
         }
 
         // Play sound effect
+        Debug.Log("Firebolt: Playing sound effect for Firebolt spell.");
         SoundManager.PlaySound(SoundType.Spell_Firebolt);
 
         List<BulletType> bulletTypes = new List<BulletType> { Bullet.BulletType.Normal, BulletType.Trail };
