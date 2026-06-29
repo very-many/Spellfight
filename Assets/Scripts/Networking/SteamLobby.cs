@@ -6,6 +6,8 @@ public class SteamLobby : MonoBehaviour
 {
     public static SteamLobby Instance;
 
+    [SerializeField] private SceneTransitionManager sceneTransitionManager;
+
     //Callbacks
     protected Callback<LobbyCreated_t> LobbyCreated;
     protected Callback<GameLobbyJoinRequested_t> JoinRequested;
@@ -33,6 +35,15 @@ public class SteamLobby : MonoBehaviour
 
     public void HostLobby()
     {
+        if (sceneTransitionManager != null)
+        {
+            sceneTransitionManager.StartTransitionAndDelay(() =>
+            {
+                SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, manager.maxConnections);
+            });
+            return;
+        }
+
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, manager.maxConnections);
     }
 
