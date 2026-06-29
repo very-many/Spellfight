@@ -56,7 +56,11 @@ public class PauseMenu : MonoBehaviour
             return;
         }
 
-        if (GameOrchestrator.Instance == null) return;
+        if (GameOrchestrator.Instance == null)
+        {
+            DisableAllMenus();
+            return;
+        }
 
         if (menuStack.Count == 0)
         {
@@ -154,6 +158,16 @@ public class PauseMenu : MonoBehaviour
         menuStack.Peek().SetActive(true);
     }
 
+    private void DisableAllMenus()
+    {
+        while (menuStack.Count > 0)
+        {
+            GameObject menu = menuStack.Pop();
+            menu.SetActive(false);
+        }
+        backgroundContainer.SetActive(false);
+    }
+
     public void OnResumeGame()
     {
         DisablePauseMenu();
@@ -176,6 +190,11 @@ public class PauseMenu : MonoBehaviour
 
     public void OnBack()
     {
+        if (GameOrchestrator.Instance == null)
+        {
+            DisableAllMenus();
+            return;
+        }
         CloseCurrentMenu();
     }
 
