@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System;
+using System.Collections;
 
 public class StaffDragAndDrop : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class StaffDragAndDrop : MonoBehaviour
 
     public event Action StaffUIReady;    //! Subscribed by UpgradeController
     public Label ReadyPlayersLabel { get; private set; }
+
+    private float wait_screen_delay = 2f;
 
     public void Start()
     {
@@ -39,6 +42,33 @@ public class StaffDragAndDrop : MonoBehaviour
     {
         _root.visible = false;
         _root.Clear();
+    }
+    public void OpenWaitingUI()
+    {
+        _root.Clear();
+        _root.visible = true;
+    
+        VisualElement screenContainer = new VisualElement();
+        screenContainer.AddToClassList("screen-container");
+        _root.Add(screenContainer);
+
+        VisualElement readyPlayersContainer = new VisualElement();
+        readyPlayersContainer.AddToClassList("readyPlayers-container");
+        screenContainer.Add(readyPlayersContainer);
+
+        ReadyPlayersLabel = new Label();
+        ReadyPlayersLabel.AddToClassList("readyPlayers-label");
+        readyPlayersContainer.Add(ReadyPlayersLabel);
+
+        VisualElement readyContainer = new VisualElement();
+        readyContainer.AddToClassList("ready-container");
+        screenContainer.Add(readyContainer);
+    
+        Label readyLabel = new Label("You are ready.");
+        readyLabel.AddToClassList("ready-message");
+        readyContainer.Add(readyLabel);
+
+        StaffUIReady?.Invoke();
     }
 
     public void SetReadyPlayersText(string text)
@@ -126,11 +156,20 @@ public class StaffDragAndDrop : MonoBehaviour
         //set local player ready in GameOrchestrator
         if (GameOrchestrator.Instance != null && GameOrchestrator.Instance.CurrentGameState == GameOrchestrator.GameState.Upgrade)
         {
-            PlayerObjectController player = playerMainCoordinator.GetComponent<PlayerObjectController>();
-            if (player != null)
-            {
-                player.SetUpgradeReady();
-            }
+            OpenWaitingUI();
+
+            StartCoroutine(ReadyAfterDelay());
+        }
+    }
+
+    private IEnumerator ReadyAfterDelay()
+    {
+        yield return new WaitForSeconds(wait_screen_delay); // Preview waiting screen for 5 seconds
+    
+        PlayerObjectController player = playerMainCoordinator.GetComponent<PlayerObjectController>();
+        if (player != null)
+        {
+            player.SetUpgradeReady();
         }
     }
 
