@@ -158,7 +158,7 @@ public class PauseMenu : MonoBehaviour
         menuStack.Peek().SetActive(true);
     }
 
-    private void DisableAllMenus()
+    public void DisableAllMenus()
     {
         while (menuStack.Count > 0)
         {
@@ -178,7 +178,7 @@ public class PauseMenu : MonoBehaviour
         if (GameOrchestrator.Instance != null) GameOrchestrator.Instance.LeaveGame();
         else
         {
-            if(Application.isEditor) UnityEditor.EditorApplication.ExitPlaymode();
+            if (Application.isEditor) UnityEditor.EditorApplication.ExitPlaymode();
             else Application.Quit();
         }
     }

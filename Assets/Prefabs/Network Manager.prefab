@@ -53,7 +53,7 @@ MonoBehaviour:
   headlessStartMode: 0
   editorAutoStart: 0
   sendRate: 60
-  offlineScene: Assets/Scenes/MainMenu.unity
+  offlineScene: Assets/Scenes/MainMenu_Minimal.unity
   onlineScene: Assets/Scenes/Lobby.unity
   offlineSceneLoadDelay: 0
   transport: {fileID: 1926786700883623263}
@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c360cd58157b4ed4aa38a191a389883f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  sceneTransitionManager: {fileID: 0}
   CurrentLobbyID: 0
 --- !u!114 &8997071280269341182
 MonoBehaviour:
