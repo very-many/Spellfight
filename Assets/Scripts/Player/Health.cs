@@ -13,8 +13,11 @@ public class Health : NetworkBehaviour
 
 
     [SerializeField] private HealthBar healthBar;
+
     [SerializeField] private ParticleSystem damageParticles;
+    [SerializeField] private ParticleSystem deathParticles;
     private ParticleSystem _damageParticlesInstance;
+    private ParticleSystem _deathParticlesInstance;
 
     void OnEnable()
     {
@@ -97,7 +100,9 @@ public class Health : NetworkBehaviour
     private void DieOnClient()
     {
         //play death animation
-        //spawn death sound
+
+        //spawn death effect bzw. particles
+        SpawnDeathParticles();
 
         //disable player object or trigger respawn
         gameObject.SetActive(false);
@@ -115,5 +120,9 @@ public class Health : NetworkBehaviour
     private void SpawnDamageParticles()
     {
         _damageParticlesInstance = Instantiate(damageParticles, transform.position, Quaternion.identity);
+    }
+    private void SpawnDeathParticles()
+    {
+        _deathParticlesInstance = Instantiate(deathParticles, transform.position, Quaternion.identity);
     }
 }
