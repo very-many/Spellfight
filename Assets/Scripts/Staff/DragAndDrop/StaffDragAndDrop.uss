@@ -2,7 +2,6 @@
 
 .staff-row {
     flex-direction: row;
-    background-color: rgba(0,0,0,0.2);
     margin: 5px;
     padding: 10px;
     align-items: center;
