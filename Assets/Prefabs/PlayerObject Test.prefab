@@ -1220,6 +1220,7 @@ MonoBehaviour:
   maxHealth: 300
   currentHealth: 0
   healthBar: {fileID: 9160002307464732421}
+  damageParticles: {fileID: 6178228674302175117, guid: 4a8a6a6e0c7990f4a830c05a80315815, type: 3}
 --- !u!114 &2552065292700251580
 MonoBehaviour:
   m_ObjectHideFlags: 0
