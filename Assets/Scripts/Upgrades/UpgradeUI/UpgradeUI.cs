@@ -10,7 +10,7 @@ public class UpgradeUI : MonoBehaviour
     public StyleSheet commonStyleSheet;
 
     public PlayerMainCoordinator playerMainCoordinator;
-    
+
     private List<Upgrade> _upgradeChoices = new List<Upgrade>();
     private VisualElement _root;
     private PlayerMenuCaller _caller;
@@ -21,7 +21,7 @@ public class UpgradeUI : MonoBehaviour
     public void Start()
     {
         _root = GetComponent<UIDocument>().rootVisualElement;
-            
+
         _root.visible = false;
 
         _root.RegisterCallback<PointerDownEvent>(PointerDownHandler);
@@ -44,11 +44,11 @@ public class UpgradeUI : MonoBehaviour
 
     private void GetRandomizedUpgrades()
     {
-        for (int i=0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
             _upgradeChoices.Add(UpgradeLibrary.instance.RandomUpgrade());
         }
-        
+
     }
 
     public void SetReadyPlayersText(string text)
@@ -56,7 +56,7 @@ public class UpgradeUI : MonoBehaviour
         if (ReadyPlayersLabel != null)
             ReadyPlayersLabel.text = text;
     }
-    
+
 
     private void InitializeUI()
     {
@@ -91,7 +91,7 @@ public class UpgradeUI : MonoBehaviour
         screenContainer.Add(row2);
 
         // Loop through choices
-        for (int i = 0; i < _upgradeChoices.Count;  i++)
+        for (int i = 0; i < _upgradeChoices.Count; i++)
         {
             var upgradeChoice = _upgradeChoices[i];
             VisualElement currentRow = i < 2 ? row1 : row2;
@@ -101,6 +101,17 @@ public class UpgradeUI : MonoBehaviour
             upgradeChoiceCard.clicked += () => ChooseUpgrade(upgradeChoiceCard);
             upgradeChoiceCard.AddToClassList("upgrade-card");
             upgradeChoiceCard.userData = upgradeChoice;
+
+            //Callback for every induvidual card
+            upgradeChoiceCard.RegisterCallback<MouseEnterEvent>(_ =>
+            {
+                upgradeChoiceCard.AddToClassList("upgrade-card-hover");
+            });
+
+            upgradeChoiceCard.RegisterCallback<MouseLeaveEvent>(_ =>
+            {
+                upgradeChoiceCard.RemoveFromClassList("upgrade-card-hover");
+            });
 
             // Icon
             VisualElement upgradeIcon = new VisualElement();
@@ -133,7 +144,7 @@ public class UpgradeUI : MonoBehaviour
     {
         VisualElement selectedUpgrade = evt.target as VisualElement;
 
-        if (!(selectedUpgrade is Button)) { selectedUpgrade = selectedUpgrade.parent;  }
+        if (!(selectedUpgrade is Button)) { selectedUpgrade = selectedUpgrade.parent; }
 
         ChooseUpgrade(selectedUpgrade as Button);
     }
