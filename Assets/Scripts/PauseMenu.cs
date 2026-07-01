@@ -178,8 +178,7 @@ public class PauseMenu : MonoBehaviour
         if (GameOrchestrator.Instance != null) GameOrchestrator.Instance.LeaveGame();
         else
         {
-            if (Application.isEditor) UnityEditor.EditorApplication.ExitPlaymode();
-            else Application.Quit();
+            Application.Quit();
         }
     }
 
