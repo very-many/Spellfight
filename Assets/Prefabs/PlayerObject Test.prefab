@@ -428,8 +428,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -10.3}
-  m_SizeDelta: {x: 52, y: 9}
+  m_AnchoredPosition: {x: 0, y: -6.079999}
+  m_SizeDelta: {x: 70.239, y: 12.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4970533248327961178
 MonoBehaviour:
@@ -991,11 +991,11 @@ MonoBehaviour:
   onLeftWall: 0
   wallSide: 0
   bottomSize: {x: 0.16, y: 0.16}
-  rightSize: {x: 0.25, y: 1}
-  leftSize: {x: 0.25, y: 1}
+  rightSize: {x: 0.25, y: 0.95}
+  leftSize: {x: 0.25, y: 0.95}
   bottomOffset: {x: 0, y: -0.5}
-  rightOffset: {x: 0.1, y: 0}
-  leftOffset: {x: -0.1, y: 0}
+  rightOffset: {x: 0.1, y: 0.01}
+  leftOffset: {x: -0.1, y: 0.01}
 --- !u!114 &4732947555476862298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,7 +1177,7 @@ MonoBehaviour:
   syncInterval: 0
   JumpAction: {fileID: 3087997780289999494, guid: cf621cf4127fe3b4c9c12a161e6e9321, type: 3}
   FallMultiplier: 3
-  JumpMultiplier: 2
+  LowJumpMultiplier: 8
   JumpSpellMultiplier: 1.4
 --- !u!114 &8140610524751975026
 MonoBehaviour:
