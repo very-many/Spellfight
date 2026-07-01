@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3618912396280266261}
   - component: {fileID: 7534417084904443843}
   - component: {fileID: 1926786700883623263}
-  - component: {fileID: 6162069772283428779}
   - component: {fileID: 2521752658161923627}
   - component: {fileID: 8997071280269341182}
   m_Layer: 0
@@ -66,7 +65,6 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 4335131577718741092, guid: d341f4f7ce4c4204998252b45bef758e, type: 3}
   - {fileID: 4063772565889404392, guid: a48533eb30c45b9438aecbeb67db160f, type: 3}
   - {fileID: 6837416952839969178, guid: 10034c82fac8e924eaa66472d0023250, type: 3}
   exceptionsDisconnect: 1
@@ -103,18 +101,6 @@ MonoBehaviour:
   Timeout: 25
   AllowSteamRelay: 1
   UseNextGenSteamNetworking: 1
---- !u!114 &6162069772283428779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4079046715975075790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SteamManager
 --- !u!114 &2521752658161923627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c360cd58157b4ed4aa38a191a389883f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  sceneTransitionManager: {fileID: 0}
   CurrentLobbyID: 0
 --- !u!114 &8997071280269341182
 MonoBehaviour:

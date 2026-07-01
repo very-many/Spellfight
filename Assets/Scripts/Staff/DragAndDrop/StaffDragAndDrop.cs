@@ -20,7 +20,7 @@ public class StaffDragAndDrop : MonoBehaviour
     public event Action StaffUIReady;    //! Subscribed by UpgradeController
     public Label ReadyPlayersLabel { get; private set; }
 
-    private float wait_screen_delay = 2f;
+    private float wait_screen_delay = 0f;
 
     public void Start()
     {
