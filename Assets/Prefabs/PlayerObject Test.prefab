@@ -768,6 +768,7 @@ GameObject:
   - component: {fileID: 3327559430433585903}
   - component: {fileID: 8140610524751975026}
   - component: {fileID: 3890450645484997893}
+  - component: {fileID: 2552065292700251580}
   - component: {fileID: 1440856973706387701}
   - component: {fileID: 3688680632892157790}
   - component: {fileID: 9051659079761304081}
@@ -1024,7 +1025,6 @@ MonoBehaviour:
   spellJumped: 0
   side: 1
   movement: {x: 0, y: 0}
-  animator: {fileID: 3735691441776991881}
   knockback: {x: 0, y: 0}
 --- !u!114 &6517591035741378657
 MonoBehaviour:
@@ -1220,6 +1220,19 @@ MonoBehaviour:
   maxHealth: 300
   currentHealth: 0
   healthBar: {fileID: 9160002307464732421}
+--- !u!114 &2552065292700251580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7407786158499650943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c259138bdf3ad443896cba74591dc3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+  capeAnimator: {fileID: 3735691441776991881}
 --- !u!114 &1440856973706387701
 MonoBehaviour:
   m_ObjectHideFlags: 0
