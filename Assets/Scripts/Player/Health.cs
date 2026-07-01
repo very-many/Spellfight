@@ -14,6 +14,11 @@ public class Health : NetworkBehaviour
 
     [SerializeField] private HealthBar healthBar;
 
+    [SerializeField] private ParticleSystem damageParticles;
+    [SerializeField] private ParticleSystem deathParticles;
+    private ParticleSystem _damageParticlesInstance;
+    private ParticleSystem _deathParticlesInstance;
+
     void OnEnable()
     {
         currentHealth = maxHealth;
@@ -72,6 +77,8 @@ public class Health : NetworkBehaviour
         }
     }
 
+    
+
     public void Kill()
     {
         if (!isServer)
@@ -84,6 +91,7 @@ public class Health : NetworkBehaviour
     private void TakeHitOnClient()
     {
         //spawn hit effect bzw. particles
+        SpawnDamageParticles();
         //spawn hit sound
         SoundManager.PlaySound(SoundType.Hit);
     }
@@ -92,7 +100,9 @@ public class Health : NetworkBehaviour
     private void DieOnClient()
     {
         //play death animation
-        //spawn death sound
+
+        //spawn death effect bzw. particles
+        SpawnDeathParticles();
 
         //disable player object or trigger respawn
         gameObject.SetActive(false);
@@ -105,5 +115,14 @@ public class Health : NetworkBehaviour
         // mebby animation or sound effect for health change
         healthBar.SetHealth(newHealth);
         Debug.Log($"Health changed from {oldHealth} to {newHealth}");
+    }
+
+    private void SpawnDamageParticles()
+    {
+        _damageParticlesInstance = Instantiate(damageParticles, transform.position, Quaternion.identity);
+    }
+    private void SpawnDeathParticles()
+    {
+        _deathParticlesInstance = Instantiate(deathParticles, transform.position, Quaternion.identity);
     }
 }

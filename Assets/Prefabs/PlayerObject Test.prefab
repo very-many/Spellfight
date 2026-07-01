@@ -775,7 +775,6 @@ GameObject:
   - component: {fileID: 3227256166308750262}
   - component: {fileID: 4963407450501170020}
   - component: {fileID: 733014467782720038}
-  - component: {fileID: 4633958341542816235}
   m_Layer: 3
   m_Name: PlayerObject Test
   m_TagString: Untagged
@@ -1220,6 +1219,8 @@ MonoBehaviour:
   maxHealth: 300
   currentHealth: 0
   healthBar: {fileID: 9160002307464732421}
+  damageParticles: {fileID: 6178228674302175117, guid: 4a8a6a6e0c7990f4a830c05a80315815, type: 3}
+  deathParticles: {fileID: 4893337196481656483, guid: 6f612acc3659ce447b50425202890541, type: 3}
 --- !u!114 &2552065292700251580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1347,21 +1348,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerUI
   staffMulti: {fileID: 0}
   styleSheet: {fileID: 7433441132597879392, guid: 30fd93adff01b2247955c9fca8fb74ff, type: 3}
---- !u!114 &4633958341542816235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7407786158499650943}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26fbc41f776f9aa43a903258d951f223, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KillOutsideCamera
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
 --- !u!1 &8997272477913709170
 GameObject:
   m_ObjectHideFlags: 0
