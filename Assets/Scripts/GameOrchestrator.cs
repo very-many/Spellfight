@@ -314,7 +314,7 @@ public class GameOrchestrator : NetworkBehaviour
             // Only the local player's controller should start UI and request teleport
             if (player == LocalPlayer)
             {
-                EnableLocalPlayerInput();
+                EnableLocalPlayerInput(true);
                 player.GetComponent<MultiStaffObject>().castLocked = true;
                 player.GetComponent<PlayerMenuCaller>().playerUI.StartUI();
                 player.GetComponent<PlayerMovementController>().RequestTeleport = true;
@@ -436,22 +436,26 @@ public class GameOrchestrator : NetworkBehaviour
         }
     }
 
-    internal void EnableLocalPlayerInput()
+    internal void EnableLocalPlayerInput(bool force = false)
     {
-        if (currentGameState != GameState.Game)
+        EnablePlayerInput(LocalPlayer, force);
+    }
+
+    private void EnablePlayerInput(PlayerObjectController player, bool force = false)
+    {
+        Debug.Log("Enabling input for player: " + (player != null ? player.PlayerName : "null"));
+        if (currentGameState != GameState.Game && !force)
         {
-            //Debug.LogWarning("Cannot enable local player input: not in Game state.");
+            Debug.LogWarning("Cannot enable local player input: not in Game state.");
             return;
         }
-
-        if (LocalPlayer != null)
+        if (player != null)
         {
-            LocalPlayer.GetComponent<PlayerInput>().enabled = true;
+            player.GetComponent<PlayerInput>().enabled = true;
         }
         else
         {
-            Debug.LogWarning("No local player found to enable input.");
+            Debug.LogWarning("No player found to enable input.");
         }
     }
-
 }
