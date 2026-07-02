@@ -21,7 +21,7 @@ public class UpgradeController : MonoBehaviour
 
         upgradeUI.UpgradeUIReady += OnUIReady;
         staffUI.StaffUIReady += OnUIReady;
-        GameOrchestrator.Instance.ReadyPlayersChanged += OnPlayerCountChanged;
+        GameOrchestrator.Instance.PlayerCountChanged += OnPlayerCountChanged;
     }
 
     private void OnDestroy()
@@ -32,7 +32,7 @@ public class UpgradeController : MonoBehaviour
         if (staffUI != null)
             staffUI.StaffUIReady -= OnUIReady;
         if(GameOrchestrator.Instance != null)
-            GameOrchestrator.Instance.ReadyPlayersChanged += OnPlayerCountChanged;
+            GameOrchestrator.Instance.PlayerCountChanged -= OnPlayerCountChanged;
     }
 
     private void OnEnable()
@@ -52,7 +52,8 @@ public class UpgradeController : MonoBehaviour
             readyCached = true;
             GameOrchestrator.Instance?.RefreshPlayerCount();
         }
-        
+        UpdateReadyPlayersText();
+
     }
 
     private void OnPlayerCountChanged(int readyCount, int playerCount, bool localReady) //OnPlayerCountChanged -> UpdateReadyPlayersText 
@@ -61,23 +62,23 @@ public class UpgradeController : MonoBehaviour
         currentPlayers = playerCount;
         currentLocalReady = localReady;
 
-        UpdateReadyPlayersText(readyCount, playerCount, localReady);
+        UpdateReadyPlayersText();
     }
 
 
-    public void UpdateReadyPlayersText(int readyCount, int playerCount, bool localPlayerReady)
+    public void UpdateReadyPlayersText()
     {
         string text;
 
-        if (playerCount > 1 && readyCount == playerCount - 1)
+        if (currentPlayers > 1 && currentReady == currentPlayers - 1)
         {
-            text = localPlayerReady
+            text = currentLocalReady
                 ? "Waiting for one player..."
                 : "Everyone is waiting for you!";
         }
         else
         {
-            text = $"{readyCount}/{playerCount} Players ready!";
+            text = $"{currentReady}/{currentPlayers} Players ready!";
         }
 
         upgradeUI?.SetReadyPlayersText(text);

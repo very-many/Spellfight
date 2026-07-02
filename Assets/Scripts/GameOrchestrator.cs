@@ -193,17 +193,14 @@ public class GameOrchestrator : NetworkBehaviour
     void OnReadyPlayersChanged(SyncList<PlayerObjectController>.Operation operation, int index, PlayerObjectController oldPlayer, PlayerObjectController newPlayer)
     {
         Debug.Log(readyPlayers.Count + " ready player(s)! There are " + (Players.Count - readyPlayers.Count) + " left.");
+
+        //on all clients, notify about ready players change
+        RefreshPlayerCount();
+
+
         if (!isServer)
             return;
-
         ShouldSwitchGameState();    //check if game state switch is needed after ready players changed
-
-        RefreshPlayerCount();
-        
-        //ReadyPlayersChanged?.Invoke(
-        //    readyPlayers.Count,
-        //    Players.Count,
-        //    readyPlayers.Contains(LocalPlayer));
     }
 
     public void RefreshPlayerCount()
