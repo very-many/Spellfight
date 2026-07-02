@@ -1,34 +1,86 @@
+@import url("Theme.uss");
+
 /*! See UI/Common.uss */
+
+#slots-container {
+    padding: 15px;
+    background-color: var(--color-panel-bg);
+    border-radius: 10px;
+    margin: 10px;
+}
 
 .staff-row {
     flex-direction: row;
-    margin: 5px;
+    margin: 6px;
     padding: 10px;
     align-items: center;
+    justify-content: center;
+
+    background-color: rgba(30, 24, 42, 0.55);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: var(--color-gold-translucent);
+}
+
+.button-bar {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    padding: 0px;
 }
 
 .staff-icon {
-    width: 80px;
-    height: 80px;
+    width: 84px;
+    height: 84px;
     color: transparent;
-    background-color: #444;
-    justify-content: center;
+
+    background-color: var(--color-icon-bg);
+    justify-content: flex-end;
     align-items: center;
-    margin-right: 10px;
-    border-radius: 5px;
-    background-image: resource("Wizard Staff")
+    margin-right: 14px;
+    border-radius: 10px;
+
+    border-width: 3px;
+    border-color: var(--color-gold);
+
+    background-image: resource("Wizard Staff");
+    -unity-background-scale-mode: scale-to-fit;
+    padding: 8px;
 }
 
-.storage-icon{
-    width: 80px;
-    height: 60px;
-    background-color: #444;
-    justify-content: center;
+.staff-icon Label {
+    color: var(--color-text-gold);
+    font-size: 11px;
+    -unity-font-style: bold;
+    -unity-text-align: lower-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: var(--color-text-outline-dark);
+}
+
+.storage-icon {
+    width: 84px;
+    height: 64px;
+    background-color: rgb(30, 44, 40);
+    justify-content: flex-end;
     align-items: center;
-    margin-right: 10px;
-    border-radius: 5px;
+    margin-right: 14px;
+    border-radius: 10px;
+
+    border-width: 3px;
+    border-color: rgb(102, 200, 170);
+
     color: transparent;
-    background-image: resource("Spellstoring Chest")
+    background-image: resource("Spellstoring Chest");
+    -unity-background-scale-mode: scale-to-fit;
+    padding: 6px;
+}
+
+.storage-icon Label {
+    color: rgb(200, 245, 230);
+    font-size: 11px;
+    -unity-font-style: bold;
+    -unity-text-align: lower-center;
+    -unity-text-outline-width: 1px;
+    -unity-text-outline-color: rgb(10, 20, 15);
 }
 
 .spellTrashCan-icon {
@@ -38,42 +90,82 @@
     justify-content: center;
     align-items: center;
     margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
+
+    background-color: rgba(60, 20, 20, 0.4);
+    border-width: 2px;
+    border-color: rgb(160, 70, 60);
+    -unity-background-scale-mode: scale-to-fit;
 }
 
 .acceptChanges-button {
-    width: 500px;
+    flex-grow: 1;
     height: 60px;
-    background-color: green;
     justify-content: center;
     align-items: center;
-    margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 8px;
+
+    background-color: rgb(58, 40, 20);
+    border-width: 2px;
+    border-color: var(--color-gold);
+
+    color: var(--color-text-gold);
+    font-size: 18px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+
+    transition-duration: 0.15s;
+}
+
+.acceptChanges-button:hover {
+    background-color: rgb(90, 140, 70);
+    border-color: rgb(220, 240, 180);
+    color: rgb(255, 255, 255);
 }
 
 .slot-container {
     flex-direction: row;
     flex-grow: 1;
+    flex-wrap: wrap;
 }
 
 .slot {
     width: 60px;
     height: 60px;
     margin: 5px;
-    background-color: #222;
+
+    background-color: var(--color-slot-bg);
     border-width: 2px;
-    border-color: #555;
+    border-color: var(--color-slot-border);
+    border-radius: 6px;
+
     justify-content: center;
     align-items: center;
+
+    transition-duration: 0.15s;
+}
+
+.slot:hover {
+    border-color: var(--color-gold);
+    background-color: rgb(34, 28, 44);
 }
 
 .draggable-spell {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
+    width: 52px;
+    height: 52px;
+    border-radius: 6px;
     border-width: 2px;
-    border-color: white;
-    background-color: #444;
+    border-color: var(--color-spell-border);
+    background-color: var(--color-spell-bg);
     position: relative;
-    background-image: resource("Sprite_MissingNo") !important
+
+    background-image: resource("Sprite_MissingNo") !important;
+    -unity-background-scale-mode: scale-to-fit;
+
+    transition-duration: 0.1s;
+}
+
+.draggable-spell:hover {
+    border-color: rgb(180, 230, 255);
+    scale: 1.06 1.06;
 }

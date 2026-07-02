@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ui:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ui="UnityEngine.UIElements"
-    xmlns:uie="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
->
-    
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Design/Styles/Theme.uss?fileID=7433441132597879392&amp;guid=4a87026add45ecb4885d87f8361485d7&amp;type=3#Theme"/>
+    <Style src="project://database/Assets/Scripts/Player/PlayerUI/PlayerUI.uss?fileID=7433441132597879392&amp;guid=30fd93adff01b2247955c9fca8fb74ff&amp;type=3#PlayerUI"/>
 </ui:UXML>

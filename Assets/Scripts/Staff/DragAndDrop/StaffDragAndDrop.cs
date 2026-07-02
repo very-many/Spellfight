@@ -140,13 +140,14 @@ public class StaffDragAndDrop : MonoBehaviour
 
         VisualElement finalRow = new VisualElement();
         finalRow.AddToClassList("staff-row");
+        finalRow.AddToClassList("button-bar");
         mainContainer.Add(finalRow);
 
         VisualElement spellTrashCan = new VisualElement();
         spellTrashCan.AddToClassList("spellTrashCan-icon");
         finalRow.Add(spellTrashCan);
 
-        Button acceptChangesButton = new Button(() => AcceptChanges()) { text = "Done!" };
+        Button acceptChangesButton = new Button(() => AcceptChanges()) { text = "Ready" };
         acceptChangesButton.AddToClassList("acceptChanges-button");
         finalRow.Add(acceptChangesButton);
 

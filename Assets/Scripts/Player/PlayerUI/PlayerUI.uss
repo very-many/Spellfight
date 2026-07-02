@@ -1,61 +1,88 @@
-.staff-row {
-    flex-direction: row-reverse;
-    background-color: rgba(0,0,0,0.2);
-    margin: 5px;
-    padding: 10px;
-}
+@import url("Theme.uss");
 
-.staff-icon {
-    width: 70px;
-    height: 70px;
-    background-color: #444;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    border-radius: 5px;
-    background-image: resource("Wizard Staff")
-}
-.staff-icon.on-Cooldown {
-    background-color: #222;
-    color: red;
-}
-
-.slot-container {
-    flex-direction: row-reverse;
-    flex-grow: 3;
-    margin-left: -5px;
-}
-
-.main-container {
+.hud-bar {
     flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+
+    align-self: center;
+    margin-top: 4px;
+
+    padding: 3px 6px;
+
+    background-color: var(--color-panel-bg);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: var(--color-gold-translucent);
+}
+
+.hud-ability-row {
+    flex-direction: row-reverse;
+    align-items: center;
+
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.hud-charge-container {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 2px;
+}
+
+.hud-charge-slot {
+    margin: 1px;
+
+    background-color: var(--color-slot-bg);
+    border-width: 1px;
+    border-color: var(--color-slot-border);
+    border-radius: 4px;
+
     justify-content: center;
     align-items: center;
-    flex-grow: 3;
-
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    translate: -50% 0;
 }
 
-.slot {
-    width: 50px;
-    height: 50px;
-    margin-left: -20px;
-    margin-top: 10px;
-    background-color: #222;
-    border-width: 2px;
-    border-color: #555;
-    justify-content: center;
-}
-
-.spell-icon {
-    width: 49px;
-    height: 49px;
-    border-radius: 2px;
+.hud-charge-icon {
+    width: 30px;
+    height: 30px;
+    padding: 4px;
+    border-radius: 3px;
     border-width: 1px;
-    border-color: white;
-    background-color: #444;
-    position: relative;
-    background-image: resource("Sprite_MissingNo") !important
+    border-color: var(--color-spell-border);
+    background-color: var(--color-spell-bg);
+
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.hud-ability-icon {
+    width: 42px;
+    height: 42px;
+
+    background-color: var(--color-icon-bg);
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 3px;
+    border-width: 2px;
+    border-color: var(--color-gold);
+
+    background-image: resource("Wizard Staff");
+    -unity-background-scale-mode: scale-to-fit;
+
+    transition-duration: 0.2s;
+}
+
+.hud-ability-icon.hud-on-cooldown {
+    opacity: 0.45;
+    border-color: rgb(120, 100, 70);
+}
+
+.hud-cooldown-label {
+    color: rgb(255, 250, 235);
+    font-size: 20px;
+    -unity-font-style: bold;
+    -unity-text-align: center;
+
+    -unity-text-outline-width: 2px;
+    -unity-text-outline-color: var(--color-text-outline-dark);
 }

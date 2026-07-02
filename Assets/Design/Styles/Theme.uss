@@ -1,0 +1,14 @@
+* {
+    --color-gold: rgb(197, 165, 96);
+    --color-gold-translucent: rgba(197, 165, 96, 0.35);
+    --color-text-gold: rgb(240, 220, 170);
+    --color-text-outline-dark: rgb(20, 10, 5);
+    --color-panel-bg: rgba(18, 14, 28, 0.55);
+    --color-icon-bg: rgb(46, 34, 58);
+    --color-slot-bg: rgb(22, 18, 30);
+    --color-slot-border: rgb(90, 78, 60);
+    --color-spell-border: rgb(140, 200, 255);
+    --color-spell-bg: rgb(30, 40, 60);
+}
+
+

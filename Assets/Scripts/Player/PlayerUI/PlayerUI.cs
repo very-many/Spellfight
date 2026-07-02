@@ -56,8 +56,8 @@ public class PlayerUI : MonoBehaviour
 
         if (styleSheet != null) _root.styleSheets.Add(styleSheet);
 
-        VisualElement mainContainer = new VisualElement() { name = "main-container" };
-        mainContainer.AddToClassList("main-container");
+        VisualElement mainContainer = new VisualElement() { name = "hud-bar" };
+        mainContainer.AddToClassList("hud-bar");
 
         _root.Add(mainContainer);
 
@@ -65,24 +65,27 @@ public class PlayerUI : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             VisualElement row = new VisualElement();
-            row.AddToClassList("staff-row");
+            row.AddToClassList("hud-ability-row");
 
             // Row Label (The "Staff" Image or Icon)
             VisualElement staffIcon = new VisualElement();
-            staffIcon.AddToClassList("staff-icon");
-            staffIcon.Add(new Label($"Staff {i + 1}"));
+            staffIcon.AddToClassList("hud-ability-icon");
+
+            Label abilityLabel = new Label($"Staff {i + 1}");
+            abilityLabel.AddToClassList("hud-cooldown-label");
+            staffIcon.Add(abilityLabel);
 
             if (i < dynamicIcons.Count) dynamicIcons[i] = staffIcon;
 
             // The actual drop zone for this row
             VisualElement slotContainer = new VisualElement() { name = "slots" };
-            slotContainer.AddToClassList("slot-container");
+            slotContainer.AddToClassList("hud-charge-container");
 
             // Create some empty slots for each row
             for (int s = 0; s < 3; s++)
             {
                 VisualElement slot = new VisualElement();
-                slot.AddToClassList("slot");
+                slot.AddToClassList("hud-charge-slot");
                 slotContainer.Add(slot);
             }
 
@@ -96,10 +99,11 @@ public class PlayerUI : MonoBehaviour
 
     public void InsertSpells()
     {
-        List<VisualElement> rows = _root.Query<VisualElement>(className: "staff-row").ToList();
+        List<VisualElement> rows = _root.Query<VisualElement>(className: "hud-ability-row").ToList();
 
-        foreach (VisualElement row in rows) {
-            foreach (VisualElement slot in row.Query<VisualElement>(className: "slot").ToList())
+        foreach (VisualElement row in rows)
+        {
+            foreach (VisualElement slot in row.Query<VisualElement>(className: "hud-charge-slot").ToList())
             {
                 slot.Clear();
             }
@@ -129,7 +133,7 @@ public class PlayerUI : MonoBehaviour
 
     private void LoadSpellsToUI(VisualElement row, List<Spell> spellList)
     {
-        List<VisualElement> slots = row.Query<VisualElement>(className: "slot").ToList();
+        List<VisualElement> slots = row.Query<VisualElement>(className: "hud-charge-slot").ToList();
 
         int slotIndex = 2;
 
@@ -153,7 +157,7 @@ public class PlayerUI : MonoBehaviour
     {
         slot.Clear();
         VisualElement spellIcon = new VisualElement();
-        spellIcon.AddToClassList("spell-icon");
+        spellIcon.AddToClassList("hud-charge-icon");
 
         // Add link to Spell to the userData of the VisualElement
         spellIcon.userData = spell;
@@ -174,34 +178,34 @@ public class PlayerUI : MonoBehaviour
 
         if (staffMulti.Staff_1.spellCoolDownTimer > 0)
         {
-            dynamicIcons[0].AddToClassList("on-Cooldown");
+            dynamicIcons[0].AddToClassList("hud-on-cooldown");
             dynamicIcons[0].Q<Label>().text = staffMulti.Staff_1.spellCoolDownTimer.ToString("F1");
         }
         else
         {
-            dynamicIcons[0].RemoveFromClassList("on-Cooldown");
+            dynamicIcons[0].RemoveFromClassList("hud-on-cooldown");
             dynamicIcons[0].Q<Label>().text = ""; // Clears the text
         }
 
         if (staffMulti.Staff_2.spellCoolDownTimer > 0)
         {
-            dynamicIcons[1].AddToClassList("on-Cooldown");
+            dynamicIcons[1].AddToClassList("hud-on-cooldown");
             dynamicIcons[1].Q<Label>().text = staffMulti.Staff_2.spellCoolDownTimer.ToString("F1");
         }
         else
         {
-            dynamicIcons[1].RemoveFromClassList("on-Cooldown");
+            dynamicIcons[1].RemoveFromClassList("hud-on-cooldown");
             dynamicIcons[1].Q<Label>().text = ""; // Clears the text
         }
 
         if (staffMulti.Staff_3.spellCoolDownTimer > 0)
         {
-            dynamicIcons[2].AddToClassList("on-Cooldown");
+            dynamicIcons[2].AddToClassList("hud-on-cooldown");
             dynamicIcons[2].Q<Label>().text = staffMulti.Staff_3.spellCoolDownTimer.ToString("F1");
         }
         else
         {
-            dynamicIcons[2].RemoveFromClassList("on-Cooldown");
+            dynamicIcons[2].RemoveFromClassList("hud-on-cooldown");
             dynamicIcons[2].Q<Label>().text = ""; // Clears the text
         }
     }
