@@ -205,9 +205,12 @@ public class GameOrchestrator : NetworkBehaviour
     {
         RefreshPlayerCount();
 
-        //if (!isServer)
-        //    return;
-        //ShouldSwitchGameState();
+        if (!isServer)
+            return;
+        if (GameState.Initial == CurrentGameState)
+            return;  //don't switch game state if in lobby
+
+        ShouldSwitchGameState();
     }
 
     public void RefreshPlayerCount()
