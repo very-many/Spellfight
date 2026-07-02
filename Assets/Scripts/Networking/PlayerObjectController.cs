@@ -124,8 +124,9 @@ public class PlayerObjectController : NetworkBehaviour
 
     public override void OnStopClient()
     {
+        GameOrchestrator.Instance?.RemovePlayerReady(this); //remove ready status from GameOrchestrator if this player was ready
         Manager.GamePlayers.Remove(this); //TODO; this line seems to be causing an error sometimes
-        LobbyController.Instance.UpdatePlayerList();
+        LobbyController.Instance.UpdatePlayerList();    // + Notify the GameOrchestrator that the player list has changed
     }
 
     [Command]
