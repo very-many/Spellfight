@@ -1454,7 +1454,7 @@ MonoBehaviour:
   syncInterval: 0
   player: {fileID: 7407786158499650943}
   staff: {fileID: 8997272477913709170}
-  maxDistance: 0.7
+  maxDistance: 0.4
   minDistance: 0.1
   speed: 0.5
   staffWeight: 5
