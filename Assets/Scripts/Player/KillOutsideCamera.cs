@@ -1,3 +1,5 @@
+//deprecated
+
 using Mirror;
 using UnityEngine;
 

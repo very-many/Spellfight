@@ -9,15 +9,19 @@
 }
 
 .upgrade-icon {
-    width: 80px;
-    height: 80px;
+    width: 160px;
+    height: 160px;
     background-color: #444;
     justify-content: center;
     align-items: center;
     margin: 10px;
     border-width: 2px;
     border-color: white;
-    background-image: resource("Sprite_MissingNo")
+    background-image: resource("Sprite_MissingNo");
+    -unity-background-scale-mode: scale-to-fit;
+    transform-origin: center center;
+    transition-property: scale;
+    transition-duration: 0.15s;
 }
 
 .upgrade-card {
@@ -29,6 +33,8 @@
     margin-right: 50px;
     border-radius: 5px;
     justify-content: center;
+    transition-property: scale;
+    transition-duration: 0.15s;
 }
 
 .upgrade-title {
@@ -42,6 +48,7 @@
     max-width: 90%;
     text-align: center;
     -unity-text-align: middle-center;
+    display: none;
 }
 
 .upgrade-text {
@@ -55,4 +62,19 @@
     max-width: 90%;
     text-align: center;
     -unity-text-align: middle-center;
+    display: none;
+}
+
+/* On MouseEnterEvent */
+.upgrade-card-hover .upgrade-icon {
+    width: 80px;
+    height: 80px;
+}
+
+.upgrade-card-hover .upgrade-text {
+    display: flex;
+}
+
+.upgrade-card-hover .upgrade-title {
+    display: flex;
 }
