@@ -6,7 +6,7 @@ public class StaffOfFlowing : Upgrade
 
     public string upgradeTitle => "Staff Of Flowing";
 
-    public string upgradeDescription => "Increases Recovery by " + _recoveryModifier + "% and decreases spell damage by 25%";
+    public string upgradeDescription => "Increases Recovery by " + _recoveryModifier + "% and decreases spell damage by 20%";
 
     public int probabilityWeight => 10;
 
@@ -26,7 +26,7 @@ public class StaffOfFlowing : Upgrade
         float newRecoveryMod = stats.GetRecoveryModifier() * (1 + _recoveryModifier/100);
         stats.SetRecoveryModifier(newRecoveryMod);
 
-        float newBulletDamageMult = stats.GetBulletDamageMult() * 0.75f;
+        float newBulletDamageMult = stats.GetBulletDamageMult() * 0.80f;
         stats.SetBulletDamageMult(newBulletDamageMult);
     }
 }

@@ -8,7 +8,7 @@ public class ArmourOfHealth :Upgrade
 
     public string upgradeDescription => "Increases your health by " + _healthIncrease + " and increases your bullet health by 15%";
 
-    public int probabilityWeight => 20;
+    public int probabilityWeight => 10;
 
     private int _healthIncrease = 120 + Random.Range(1, 50);
 

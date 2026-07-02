@@ -6,11 +6,11 @@ public class HatOfHeavySpells : Upgrade
 
     public string upgradeTitle => "Hat of heavy Spells";
 
-    public string upgradeDescription => "Increases damage and size of bullets by " + _spellWeightIncrease + "%, reduces bullet speed by 10%";
+    public string upgradeDescription => "Increases damage of bullets by " + _bulletDamageIncrease + "%, bullet size by 10% and reduces bullet speed by 10%";
 
     public int probabilityWeight => 10;
 
-    private float _spellWeightIncrease = 20f + Random.Range(1, 6);
+    private float _bulletDamageIncrease = 20f + Random.Range(1, 6);
 
     public void ApplyUpgrade(PlayerMainCoordinator stats)
     {
@@ -24,10 +24,10 @@ public class HatOfHeavySpells : Upgrade
 
     private void ApplySpellWeight(PlayerMainCoordinator stats)
     {
-        float newDamageMult = stats.GetBulletDamageMult() * (1 + (_spellWeightIncrease/100));
+        float newDamageMult = stats.GetBulletDamageMult() * (1 + (_bulletDamageIncrease/100));
         stats.SetBulletDamageMult(newDamageMult);
 
-        float newProjectileSize = stats.GetStaffProjectileSize() * (1 + (_spellWeightIncrease / 100));
+        float newProjectileSize = stats.GetStaffProjectileSize() * 1.1f;
         stats.SetStaffProjectileSize(newProjectileSize);
 
         float newSpellSpeed = stats.GetStaffProjectileSpeed() * 0.9f;

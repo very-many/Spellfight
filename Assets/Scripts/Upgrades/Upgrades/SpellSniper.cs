@@ -6,7 +6,7 @@ public class SpellSniper : Upgrade
 
     public string upgradeTitle => "Spell Sniper";
 
-    public string upgradeDescription => "Increases your magic power by " + _magicPowerIncrease + "% and increases your bullet speed by " + _projectileSpeedIncrease + "%";
+    public string upgradeDescription => "Increases your magic power by " + _magicPowerIncrease + "%, increases your bullet speed by " + _projectileSpeedIncrease + "% and 5% less bullet size";
 
     public int probabilityWeight => 10;
 
@@ -30,5 +30,8 @@ public class SpellSniper : Upgrade
 
         float newProjectileSpeedMult = stats.GetStaffProjectileSpeed() * (1 + (_projectileSpeedIncrease / 100));
         stats.SetStaffProjectileSpeed(newProjectileSpeedMult);
+
+        float newProjectileSize = stats.GetStaffProjectileSize() * 0.95f;
+        stats.SetStaffProjectileSize(newProjectileSize);
     }
 }
