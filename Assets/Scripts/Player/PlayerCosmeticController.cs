@@ -6,7 +6,9 @@ public class PlayerCosmeticController : NetworkBehaviour
 {
     public SpriteRenderer BodyRenderer;
     public SpriteRenderer CapeRenderer;
-    public Color[] PlayerCosmetics;
+    public PlayerCosmeticSet CosmeticSet;
+    private PlayerCosmetic[] PlayerCosmetics => CosmeticSet != null ? CosmeticSet.Cosmetics : null;
+
     [Space]
     [Header("Child Player Object")]
     public GameObject PlayerObject;
@@ -18,30 +20,21 @@ public class PlayerCosmeticController : NetworkBehaviour
     public void PlayerCosmeticsSetup()
     {
         int idx = GetComponent<PlayerObjectController>().PlayerCosmetic;
-        Color bodyColor = Color.white;
         if (PlayerCosmetics != null && PlayerCosmetics.Length > 0 && idx >= 0 && idx < PlayerCosmetics.Length)
-            bodyColor = PlayerCosmetics[idx];
-
-        BodyRenderer.color = bodyColor;
-
-        // set cape to complementary color
-        if (CapeRenderer != null)
         {
-            float h, s, v;
-            Color.RGBToHSV(bodyColor, out h, out s, out v);
-            float compH = (h + 0.5f) % 1f;
-            s = Mathf.Max(0.9f, s);
-            Color capeColor = Color.HSVToRGB(compH, s, v);
-            capeColor.a = bodyColor.a;  // keep alpha
-            CapeRenderer.color = capeColor;
+            BodyRenderer.color = PlayerCosmetics[idx].BodyColor;
+            CapeRenderer.color = PlayerCosmetics[idx].CapeColor;
         }
-
-        //Debug.Log("Set color to " + PlayerSprite.color);
+        else
+        {
+            BodyRenderer.color = Color.white;
+            CapeRenderer.color = Color.white;
+        }
     }
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name == "Game")
+        if (SceneManager.GetActiveScene().name == "Game")
         {
             if (PlayerObject.activeSelf == false)
             {

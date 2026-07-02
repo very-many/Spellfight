@@ -983,7 +983,9 @@ MonoBehaviour:
   onRightWall: 0
   onLeftWall: 0
   wallSide: 0
-  collisionRadius: 0.125
+  bottomSize: {x: 0.5, y: 0.25}
+  rightSize: {x: 0.25, y: 0.5}
+  leftSize: {x: 0.25, y: 0.5}
   bottomOffset: {x: 0, y: -0.5}
   rightOffset: {x: 0.15, y: 0}
   leftOffset: {x: -0.15, y: 0}
@@ -1014,9 +1016,7 @@ MonoBehaviour:
   wallSlide: 0
   spellJumped: 0
   side: 1
-  floatyTimeInSec: 0
   movement: {x: 0, y: 0}
-  animator: {fileID: 0}
   knockback: {x: 0, y: 0}
 --- !u!114 &6517591035741378657
 MonoBehaviour:
@@ -1129,7 +1129,7 @@ MonoBehaviour:
   syncInterval: 0
   JumpAction: {fileID: 3087997780289999494, guid: cf621cf4127fe3b4c9c12a161e6e9321, type: 3}
   FallMultiplier: 3
-  JumpMultiplier: 2
+  LowJumpMultiplier: 8
   JumpSpellMultiplier: 1.7
 --- !u!114 &8140610524751975026
 MonoBehaviour:
@@ -1148,11 +1148,7 @@ MonoBehaviour:
   syncInterval: 0
   BodyRenderer: {fileID: 0}
   CapeRenderer: {fileID: 0}
-  PlayerCosmetics:
-  - {r: 0.8627451, g: 0.19215687, b: 0.19607843, a: 1}
-  - {r: 0, g: 0.7490196, b: 1, a: 1}
-  - {r: 1, g: 0.87347394, b: 0.19339621, a: 1}
-  - {r: 0.1960784, g: 0.8039216, b: 0.1960784, a: 1}
+  CosmeticSet: {fileID: 11400000, guid: 90c2ad6d29545204f95e2c861977b2c7, type: 2}
   PlayerObject: {fileID: 1668110721943493719}
 --- !u!114 &3890450645484997893
 MonoBehaviour:
@@ -1172,7 +1168,6 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   healthBar: {fileID: 9160002307464732421}
-  spawnGraceSeconds: 2
 --- !u!114 &-5831350844480441426
 MonoBehaviour:
   m_ObjectHideFlags: 0

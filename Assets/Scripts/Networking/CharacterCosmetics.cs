@@ -10,9 +10,12 @@ public class CharacterCosmetics : MonoBehaviour
     private const string PrefKeyCosmeticIndex = "CurrentCosmeticIndex";
 
     public int CurrentCosmeticIndex = 0;
-    public Color[] PlayerCosmetics;
-    public Image CurrentCosmeticImage;
+    public Image CurrentCosmeticBodyImg;
+    public Image CurrentCosmeticCapeImg;
     public TextMeshProUGUI CurrentCosmeticText;
+
+    public PlayerCosmeticSet CosmeticSet;
+    private PlayerCosmetic[] PlayerCosmetics => CosmeticSet != null ? CosmeticSet.Cosmetics : null;
 
     private void Start()
     {
@@ -22,17 +25,21 @@ public class CharacterCosmetics : MonoBehaviour
 
     private void ApplyCosmeticToUI(int index)
     {
-        if (PlayerCosmetics == null || PlayerCosmetics.Length == 0)
-            return;
+        if (PlayerCosmetics == null || PlayerCosmetics.Length == 0) return;
 
         CurrentCosmeticIndex = Mathf.Clamp(index, 0, PlayerCosmetics.Length - 1);
         PlayerPrefs.SetInt(PrefKeyCosmeticIndex, CurrentCosmeticIndex);
 
-        if (CurrentCosmeticImage != null)
-            CurrentCosmeticImage.color = PlayerCosmetics[CurrentCosmeticIndex];
+        PlayerCosmetic cosmetic = PlayerCosmetics[CurrentCosmeticIndex];
+
+        if (CurrentCosmeticBodyImg != null)
+            CurrentCosmeticBodyImg.color = cosmetic.BodyColor;
+
+        if (CurrentCosmeticCapeImg != null)
+            CurrentCosmeticCapeImg.color = cosmetic.CapeColor;
 
         if (CurrentCosmeticText != null)
-            CurrentCosmeticText.text = PlayerCosmetics[CurrentCosmeticIndex].ToString();
+            CurrentCosmeticText.text = cosmetic.Name;
     }
 
     private void SetCosmetic(int index)

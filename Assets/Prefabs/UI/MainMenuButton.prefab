@@ -113,6 +113,10 @@ PrefabInstance:
       value: Host Game
       objectReference: {fileID: 0}
     - target: {fileID: 5857753487520673327, guid: e16256786330a8e45832e72eac2a64d1, type: 3}
+      propertyPath: m_StyleSheet
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857753487520673327, guid: e16256786330a8e45832e72eac2a64d1, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
