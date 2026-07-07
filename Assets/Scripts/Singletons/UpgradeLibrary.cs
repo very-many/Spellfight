@@ -12,7 +12,8 @@ public class UpgradeLibrary : MonoBehaviour
         _allUpgradesList = new List<Upgrade> {
             new SpellUpgrade(), new SpeedBoots(), new StaffOfPower(),
             new ArmourOfHealth(), new JumpBoots(), new HatOfHeavySpells(),
-            new HeartOfTheGiant(), new SpellSniper(), new StaffOfFlowing()};
+            new HeartOfTheGiant(), new SpellSniper(), new StaffOfFlowing(),
+            new TomeOfBalance()};
     }
 
     public Upgrade RandomUpgrade()

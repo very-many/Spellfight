@@ -6,9 +6,9 @@ public class TomeOfBalance : Upgrade
 
     public string upgradeTitle => "Tome Of Balance";
 
-    public string upgradeDescription => "Increases both health and recovery by" + _increase + "%";
+    public string upgradeDescription => "Increases both health and recovery by " + _increase + "%";
 
-    public int probabilityWeight => throw new System.NotImplementedException();
+    public int probabilityWeight => 10;
 
     private float _increase = 8f + Random.Range(1, 5);
 
