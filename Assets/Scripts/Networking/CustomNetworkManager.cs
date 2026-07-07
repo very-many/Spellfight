@@ -40,6 +40,24 @@ public class CustomNetworkManager : NetworkManager
             bulletPool.RegisterClientHandlers();
     }
 
+    public override void OnStopHost()
+    {
+        GamePlayers.Clear();
+        base.OnStopHost();
+    }
+
+    public override void OnStopServer()
+    {
+        GamePlayers.Clear();
+        base.OnStopServer();
+    }
+
+    public override void OnStopClient()
+    {
+        GamePlayers.Clear();
+        base.OnStopClient();
+    }
+
     public override void OnServerSceneChanged(string sceneName)
     {
         base.OnServerSceneChanged(sceneName);

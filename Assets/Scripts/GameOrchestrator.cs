@@ -404,6 +404,8 @@ public class GameOrchestrator : NetworkBehaviour
             offlineScene = Manager.offlineScene;
             Manager.offlineScene = string.Empty;
 
+            Manager.GetComponent<SteamLobby>()?.LeaveLobby();
+
             if (NetworkServer.active && NetworkClient.isConnected)
             {
                 Manager.StopHost();
