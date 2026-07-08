@@ -369,7 +369,7 @@ public class StaffDragAndDrop : MonoBehaviour
         // Add image from spell object
         Sprite spellSprite = Resources.Load<Sprite>(spell.spellImagePath);
         draggableSpell.style.backgroundImage = new StyleBackground(spellSprite);
-        draggableSpell.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+        draggableSpell.style.backgroundSize = new BackgroundSize(Length.Percent(100), Length.Percent(100));
 
         slot.Add(draggableSpell);
     }

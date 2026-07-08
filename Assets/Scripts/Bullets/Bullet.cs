@@ -12,7 +12,7 @@ using static UnityEngine.ParticleSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : NetworkBehaviour
 {
-    private SpriteRenderer renderer;
+    private new SpriteRenderer renderer;
     private Rigidbody2D rb;
     private Spellcasting spellcasting;
     private TrailRenderer trailRenderer;
