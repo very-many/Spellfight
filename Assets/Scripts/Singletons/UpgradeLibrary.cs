@@ -46,7 +46,7 @@ public class UpgradeLibrary : MonoBehaviour
 
         }
         // this line should never be executed and is a failsafe
-        return Random.RandomRange(0, _allUpgradesList.Count);
+        return Random.Range(0, _allUpgradesList.Count);
     }
     private void Awake()
     {

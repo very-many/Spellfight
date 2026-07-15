@@ -142,7 +142,7 @@ public class DragAndDropManipulator : PointerManipulator
         _dummyIcon?.RemoveFromHierarchy();
         _dummyIcon = null;
         target.style.visibility = Visibility.Visible;
-        target.transform.position = Vector3.zero;
+        target.style.translate = Vector3.zero;
         enabled = false;
     }
 }
