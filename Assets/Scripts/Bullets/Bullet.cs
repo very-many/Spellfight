@@ -142,7 +142,7 @@ public class Bullet : NetworkBehaviour
 
 
         hit = Physics2D.CircleCast(transform.position, this.transform.localScale.magnitude * 0.4f, direction, travelDistance, bulletPlayerCollision);
-        if (hit.collider != null && isServer && !justBounced)
+        if (hit.collider != null && isServer)
         {
             Collider2D collision = hit.collider;
 
@@ -155,7 +155,7 @@ public class Bullet : NetworkBehaviour
 
 
         hit = Physics2D.CircleCast(transform.position, this.transform.localScale.magnitude * 0.4f, direction, travelDistance, whatDestroysBullet);
-        if (hit.collider != null)
+        if (hit.collider != null && !justBounced)
         {
             if (stats.bulletTypes.Contains(BulletType.BounceOnWall) && stats.bounces > 0)
             {
