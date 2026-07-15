@@ -122,7 +122,7 @@ public class UpgradeUI : MonoBehaviour
             {
                 upgradeIcon.style.backgroundImage = new StyleBackground(spellSprite);
             }
-            upgradeIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            upgradeIcon.style.backgroundSize = new BackgroundSize(Length.Percent(100), Length.Percent(100));
 
             Label upgradeText = new Label();
             upgradeText.AddToClassList("upgrade-text");

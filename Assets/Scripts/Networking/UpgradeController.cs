@@ -109,7 +109,7 @@ public class UpgradeController : MonoBehaviour
         {
             if (NetworkClient.ready)
             {
-                foreach (var caller in FindObjectsOfType<PlayerMenuCaller>())
+                foreach (var caller in FindObjectsByType<PlayerMenuCaller>(FindObjectsSortMode.None))
                 {
                     if (caller.isOwned)
                     {

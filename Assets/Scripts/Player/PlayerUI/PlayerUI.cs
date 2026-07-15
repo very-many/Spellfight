@@ -167,7 +167,7 @@ public class PlayerUI : MonoBehaviour
         // Add image from spell object
         Sprite spellSprite = Resources.Load<Sprite>(spell.spellImagePath);
         spellIcon.style.backgroundImage = new StyleBackground(spellSprite);
-        spellIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+        spellIcon.style.backgroundSize = new BackgroundSize(Length.Percent(100), Length.Percent(100));
 
         slot.Add(spellIcon);
     }

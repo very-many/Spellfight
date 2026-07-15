@@ -43,7 +43,7 @@ public class SpellLibrary : MonoBehaviour
 
         }
         // this line should never be executed and is a failsafe
-        return Random.RandomRange(0, _allSpellList.Count);
+        return Random.Range(0, _allSpellList.Count);
     }
 
     private void Awake()
