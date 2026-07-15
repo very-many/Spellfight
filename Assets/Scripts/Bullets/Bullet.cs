@@ -55,6 +55,9 @@ public class Bullet : NetworkBehaviour
     private float currentDamage;
     private float currentHealth;
 
+    private Vector2 bounceVelocity;
+    private bool justBounced = false;
+
     public enum BulletType
     {
         Normal, //straight velocity, no gravity
@@ -103,9 +106,6 @@ public class Bullet : NetworkBehaviour
             * (stats.bulletTypes.Contains(BulletType.DamageScaleWithSize) ? currentSizeMod : 1f)
             * (stats.bulletTypes.Contains(BulletType.DamageScaleWithSpeed) ? currentSpeedMod : 1f);
 
-        
-
-
         if (Time.time > _bounceEscapeTime)
         {
             this.transform.localScale = Vector3.one * stats.bulletSize * currentSizeMod;
@@ -142,7 +142,7 @@ public class Bullet : NetworkBehaviour
 
 
         hit = Physics2D.CircleCast(transform.position, this.transform.localScale.magnitude * 0.4f, direction, travelDistance, bulletPlayerCollision);
-        if (hit.collider != null && isServer)
+        if (hit.collider != null && isServer && !justBounced)
         {
             Collider2D collision = hit.collider;
 
@@ -165,13 +165,22 @@ public class Bullet : NetworkBehaviour
                 transform.right = newDirection;
                 float angle = Mathf.Atan2(newDirection.y, newDirection.x) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.Euler(0, 0, angle -90);
-                rb.linearVelocity = newDirection * velocity.magnitude * stats.bounciness;
+
+                rb.linearVelocity = Vector2.zero;
+                bounceVelocity = newDirection * velocity.magnitude * stats.bounciness;
+                justBounced = true;
 
                 if (stats.bulletTypes.Contains(BulletType.IncreaseSizeOnBounce))
                 {
                     currentSizeMod += velocity.magnitude * stats.growthMod;
-                    //dcurrentHealth +=  stats.bulletHealth * (velocity.magnitude * stats.growthMod);
                     _bounceEscapeTime = Time.time + 0.05f;
+                    rb.linearVelocity = bounceVelocity;
+                    justBounced = false;
+                }
+                else
+                {
+                    Vector2 currentPositionToHit = (hit.point - (Vector2)transform.position).normalized;
+                    transform.position = hit.point - currentPositionToHit * transform.localScale.magnitude * 0.5f;
                 }
             }
             else
@@ -179,6 +188,12 @@ public class Bullet : NetworkBehaviour
                 DestroyBullet();
                 Debug.Log("hit Wall");
             }
+        }
+
+        if (justBounced)
+        {
+            rb.linearVelocity = bounceVelocity;
+            justBounced = false;
         }
     }
 
